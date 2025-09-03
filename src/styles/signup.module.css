@@ -1,0 +1,117 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #cc00ff;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.signupContainer{
+    width: 100%;
+    height: 100vh;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.innerSignupContainer{
+    width: 30%;
+    height: 700px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    font-family: var(--font-lato);
+}
+.fullnameInput, .emailInput, 
+.passwordInput, .confirmPasswordInput, 
+.signupButton, .navButton{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fullnameInput input, .emailInput input{
+    height: 50px;
+    padding: 10px;
+    outline: none;
+    border: none;
+    border: 1px solid var(--hover-color);
+    border-radius: 4px;
+    font-family: var(--font-secular);
+    font-size: 18px;
+    &:focus{
+        border: 3px solid var(--hover-color);
+    }
+}
+
+.conPassContainer, .passContainer{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--hover-color);
+    padding: 10px;
+    border-radius: 4px;
+    &:focus-within{
+        border: 3px solid var(--hover-color);
+    }
+}
+
+.passContainer input, .conPassContainer input{
+    flex-grow: 1;
+    height: 100%;
+    outline: none;
+    border: none;
+    font-family: var(--font-secular);
+    font-size: 18px;
+}
+.signupButton{
+    width: 90%;
+    height: 50px;
+}
+.signupButton button{
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary-color);
+    border-radius: 4px;
+    font-family: var(--font-secular);
+    color: var(--primary-color);
+    font-size: 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    &:hover{
+        background-color: var(--hover-color);
+    }
+}
+
+.authError{
+    width: 90%;
+    height: 50px;
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+.authError span{
+    font-family: var(--font-secular);
+    color: var(--error-color);
+
+}
