@@ -1,0 +1,121 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #b750d1;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+    --modal-backgraound--color: rgb(26, 26, 26);
+}
+
+.createSpaceModalOverlay{
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(26, 26, 26, 0.5);
+    position: absolute;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.createSpaceContainer{
+    width: 40%;
+    height: 600px;
+    background-color: var(--modal-backgraound--color);
+    border-radius: 12px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.closeIcon{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: gray;
+}
+
+.pulseHeader{
+    width: 90%;
+    height: 70px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 3px;
+    color: rgb(216, 216, 216);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-family: var(--font-secular);
+    font-size: 14px;
+}
+
+.spaceName{
+    width: 90%;
+    height: 70px;
+}
+.spaceName input{
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--secondary-color);
+    background-color: inherit;
+    border-radius: 3px;
+    box-sizing: border-box;
+    padding: 0 1em;
+    font-family: var(--font-secular);
+    font-size: 20px;
+    color: rgb(216, 216, 216);
+}
+
+.spaceDescription{
+    width: 90%;
+    height: 200px;
+}
+.spaceDescription textarea{
+    width: 100%;
+    height: 100%;
+    resize: none;
+    outline: none;
+    background-color: inherit;
+    padding: 1em 1em;
+    color: white;
+    font-size: 20px;
+    font-family: var(--font-secular);
+    border-radius: 3px;
+}
+
+
+.createSpaceContainer button{
+    width: 90%;
+    height: 50px;
+    background-color: var(--secondary-color);
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-secular);
+    font-size: 20px;
+    &:hover{
+        background-color: var(--hover-color);
+    }
+}
+
+.successMessage, .errorMessage{
+    width: 90%;
+    height: 60px;
+    border:  1px solid var(--success-color);
+    font-family: var(--font-secular);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    color: var(--success-color);
+}
+
+.errorMessage{
+    color: var(--error-color);
+    border-color: var(--error-color);
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function JoinspaceModal() {
+function JoinspaceModal({ onClose }) {
   return (
     <div>JoinspaceModal</div>
   )
