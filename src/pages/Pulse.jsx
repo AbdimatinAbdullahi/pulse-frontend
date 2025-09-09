@@ -1,83 +1,95 @@
 import React, { useEffect, useState } from 'react'
-import style from '../styles/pulse.module.css'
+import style from '../styles/pulse.module.css' 
 
 
-import MyHome from './MyHome'
-import Space from './Space'
+import { useAuth } from '../context/AuthContext'
 import { useSpaceContext } from '../context/SpaceContext'
+
 import CreateSpaceModal from '../modals/CreateSpaceModal'
-import JoinspaceModal from '../modals/JoinspaceModal'
+import Space from './Space'
 
 function Pulse() {
-  const [activeTab, setActiveTab] = useState("Home")
-  const [joinSpaceModalOpen, setJoinSpaceModalOpen] = useState(false)
-  const [createSpaceModalOpen, setCreateSpaceModalOpen] = useState(false)
 
-  const { dispatch, state, fetchMeetingsAndSpaces } = useSpaceContext()
-  const { spaces = [], activespace } = state
+  const { user }  = useAuth()
+  const { state, dispatch, FetchInitialSpacesAndItsData} = useSpaceContext()
 
-    function handleActiveTab(tabName, space = null) {
-    // prevent switching only if both tab *and* space are unchanged
-    if (tabName === activeTab && (tabName !== "Space" || activespace?.id === space?.id)) {
-        return
+  const { spaces, activespace } = state;
+
+  const [ loading, setLoading ] = useState(false)
+  const [ createWorkspaceModal, setcreateWorkspaceModal ] = useState(false)
+
+  useEffect(()=>{
+    if(!user.id) return
+    async function fetchWorkspaces(){
+      setLoading(true)
+      console.log("User id: ", user.id)
+      await FetchInitialSpacesAndItsData(user.id)
+      setLoading(false)
     }
+    fetchWorkspaces()
+  }, [user])
 
-    if (tabName === "Space" && space) {
-        dispatch({ type: "SET_ACTIVE_SPACE", payload: space })
-    } else {
-        dispatch({ type: "SET_ACTIVE_SPACE", payload: null })
-    }
-    setActiveTab(tabName)
-    }
+  useEffect(()=>{
+    console.log("Active space: ", activespace)
+  }, [activespace])
 
 
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (token) fetchMeetingsAndSpaces(token)
-  }, [])
+  const handleSpaceClick = (space)=>{
+      dispatch({type: "SELECT_ACTIVE_SPACE", payload: space})
+  }
+
 
   return (
-    <div className={style.pulseContainer}>
+    <div className={style.pulseContainer} >
+        <div className={style.sidebarContainer}>
+            <div className={style.headerPulse}>
+                Pulse: Where meeting happens
+            </div>
 
-      <div className={style.sidebarContainer}>
-        <div className={style.headerPulse}>Pulse</div>
+          { loading ? (
+              <div>Loading ...</div>
+              ) : spaces.length > 0 ? (
+                spaces.map((space) => (
+                    <div key={space.Space.id} className={style.tabs} onClick={()=>handleSpaceClick(space)} > 
+                      { activespace && activespace.id == space.Space.id && <span className={style.activeTab}></span>}
+                      {space.Space?.name}
+                    </div>
+                ))
+                
+              ) : (
+                <>
+                  <div className={style.tabs}>Join Space</div>
+                  <div className={style.tabs} onClick={() => setcreateWorkspaceModal(true)}> Create space</div>
+                </>
+              )}
 
-        <div onClick={() => handleActiveTab("Home")} className={style.tabs} >
-            {!activespace && <span className={style.activeTab}></span>}
-            Home
+            { !loading && (
+              <>
+                <div className={style.tabs} onClick={() => setcreateWorkspaceModal(true)}> Create space</div>
+                <div className={style.tabs}> Join space </div>
+              </>
+            )}
+
         </div>
 
-        { spaces.length > 0 && spaces.map((space) => (
-            <div
-                key={space.id}
-                onClick={() => {
-                // call handler only if we actually change space
-                if (activeTab !== "Space" || activespace?.id !== space.id) {
-                    handleActiveTab("Space", space)
-                }
-                }} className={style.tabs}>
-                {activespace?.id === space.id && <span className={style.activeTab}></span>}
-                {space.name}
-            </div>
-        ))}
+        <div className={style.spaceContainer}>
+          {
+             loading ? (
+              <div> Loading ... </div> 
+             ) : (
+                activespace ? (
+                  <Space space={activespace} />
+                ) : (
+                  <div> No active space </div>
+                )
+             )
+          }
+        </div>
 
-        <div onClick={() => setCreateSpaceModalOpen(true)} className={style.tabs} >Create Workspace</div>
-        <div onClick={() => setJoinSpaceModalOpen(true)} className={style.tabs}>Join Workspace</div>
-      </div>
+        { createWorkspaceModal && <CreateSpaceModal onClose={()=>setcreateWorkspaceModal(false)} />}
 
-      {activeTab === "Home" && <MyHome />}
-      {activeTab === "Space" && <Space />}
-
-      {createSpaceModalOpen && ( 
-        <CreateSpaceModal onClose={()=> setCreateSpaceModalOpen(false)} />
-      )}
-
-      {joinSpaceModalOpen && (
-        <JoinspaceModal onClose={()=> setJoinSpaceModalOpen(false)} />
-      )}
     </div>
   )
 }
-
 
 export default Pulse

@@ -25,7 +25,6 @@ export function AuthProvider({children}){
             navigate("/")
             return
         }
-        console.log("Auth token: ", token)
 
         // Send Token to protected backend
         const decodeToken = async ()=>{
@@ -44,7 +43,6 @@ export function AuthProvider({children}){
                 }    
 
             } catch (error) {
-                console.log("Protected Route Error: ", error)
                 if(error.response?.status == 401){
                     setAuthError("Invalid Credintials")
                 } else {
