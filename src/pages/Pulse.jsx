@@ -35,7 +35,9 @@ function Pulse() {
 
 
   const handleSpaceClick = (space)=>{
-      dispatch({type: "SELECT_ACTIVE_SPACE", payload: space})
+    console.log("Clicked space", space)
+    if(activespace.id == space.Space.id) return
+    dispatch({type: "SELECT_ACTIVE_SPACE", payload: space})
   }
 
 

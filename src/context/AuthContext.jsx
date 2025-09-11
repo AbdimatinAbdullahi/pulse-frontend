@@ -43,11 +43,6 @@ export function AuthProvider({children}){
                 }    
 
             } catch (error) {
-                if(error.response?.status == 401){
-                    setAuthError("Invalid Credintials")
-                } else {
-                    setAuthError("Something went wrong")
-                }
                 navigate("/")
             }
         }
@@ -86,7 +81,7 @@ export function AuthProvider({children}){
                 setUser({
                     id: loginResponse.data.user.id,
                     email: loginResponse.data.user.email,
-                    name: loginResponse.data.user.fullname,
+                    fullname: loginResponse.data.user.fullname,
                     token: loginResponse.data.token
                 })
                 localStorage.setItem("token", loginResponse.data.token)

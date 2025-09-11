@@ -86,9 +86,12 @@
     border: 3px solid var(--secondary-color);
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
+
 }
 
 .activeT{
     width: 98%;
     flex-grow: 1;
+    box-sizing: border-box;
+    padding: 1em 0;
 }

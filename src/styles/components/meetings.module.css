@@ -1,0 +1,85 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #cc00ff;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+}
+
+.meetingContainer{
+    width: 100%;
+    height: 100%;
+    border: 1px solid #9900cc;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-sizing: border-box;
+    padding: 1em 0;
+    position: relative;
+}
+
+.todaysMeeting, .tomorrowsMeeting{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.todaysMeeting h2, .tomorrowsMeeting h2{
+    font-family: var(--font-lato);
+    color: var(--hover-color);
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.meetings, .meetingsTw{
+    width: 100%;
+    flex-grow: 1;
+    border-bottom: 1px solid gray;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    padding: 4px 4px;
+}
+
+.createMeeting{
+    position: absolute;
+    bottom: calc(1em + 7px);
+    right: 5px;
+    width: 240px;
+    height: 60px;
+    background-color: var(--hover-color);
+    font-family: var(--font-secular);
+    color: white;
+    border-radius: 6px;
+    outline: none;
+    border: none;
+    &:hover{
+        background-color: var(--secondary-color);
+        cursor: pointer;
+    }
+}
+
+.noMeeting{
+    aspect-ratio: 1/1;
+    height: 320px;
+    border: 1px solid gray;
+    align-self: center;
+    border-radius: 12px;  
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-lato);
+    font-weight: 900;
+}
+.meetingsTw{
+    border: none;
+    position: relative;
+}

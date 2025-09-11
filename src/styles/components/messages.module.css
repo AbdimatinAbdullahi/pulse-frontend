@@ -1,0 +1,95 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #cc00ff;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+}
+
+.messageContainer{
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
+}
+
+.messagesHolderContainer{
+    flex-grow: 1;
+    display: flex;
+    align-items: start;
+    box-sizing: border-box;
+    padding: 1em;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid gray;
+    border-radius: 8px;
+}
+
+.composerContainer{
+    width: 100%;
+    min-height: 100px;
+    height: fit-content;
+    border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid var(--hover-color);
+    border-radius: 4px;
+    &:focus-within{
+        border: 2px solid var(--hover-color);
+        outline: none;
+    }
+}
+
+.composerContainer textarea{
+    flex-grow: 1;
+    font-family: var(--font-lato);
+    font-weight: 700;
+    color: black;
+    font-size: 20px;
+    padding: 10px;
+    overflow-y: auto;
+    min-height: 100%;
+    height: fit-content;
+    resize: none;
+    border: none;
+    outline: none;
+}
+
+.composerContainer textarea::-webkit-scrollbar{
+    display:none;
+}
+
+.actionIcons{
+    width: 10%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:space-evenly;
+}
+
+.iconComposer{
+    color: gray;
+    cursor: pointer;
+    &:hover{
+        color: var(--hover-color);
+    }
+}
+
+.emptyMessage{
+    font-family: var(--font-ubuntu);
+    font-size: 30px;
+    color: gray;
+    width: 100%;
+    border: 1px solid gray;
+    height: 60px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

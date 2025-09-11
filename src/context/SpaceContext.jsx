@@ -15,11 +15,12 @@ const room_services_url = import.meta.env.VITE_ROOM_SERVICE_URL
 function reducer(state, action){
     switch(action.type){
         case "INITIAL_FETCH":
-            return { ...state, spaces:[ ...action.payload ], activespace: action.payload.length > 0 ? action.payload[0].Space : null }
+            return { ...state, spaces:[ ...action.payload ], activespace: action.payload.length > 0 ? action.payload[0] : null }
         case "ADD_SPACE":
             return {...state, spaces: [...state.spaces, action.payload ]}
         case  "SELECT_ACTIVE_SPACE":
-            return {...state, activespace: action.payload}
+            console.log("Selecting space: ", action.payload)
+            return {...state, activespace: action.payload }
         default:
             return {...state }
     }

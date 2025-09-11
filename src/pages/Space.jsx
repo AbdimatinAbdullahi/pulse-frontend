@@ -1,4 +1,4 @@
-import React, { act } from 'react'
+import React, { act, useEffect } from 'react'
 import style from '../styles/space.module.css'
 import { useState } from 'react'
 
@@ -9,10 +9,15 @@ import Messages from '../components/Messages'
 import Invoices from '../components/Invoices'
 import History from '../components/History'
 import General from '../components/General'
+import { useSpaceContext } from '../context/SpaceContext'
 
 function Space({ space }) {
 
   const { user } = useAuth()
+  const { state } = useSpaceContext()
+  const { spaces, activespace } = state
+
+  const { TodaysMeetings, TomorrowsMeeting  } = activespace;
 
   const [ activeTab, setActiveTab ] = useState("Meetings")
 
@@ -21,11 +26,12 @@ function Space({ space }) {
     setActiveTab(tab)
   } 
 
+
   return (
-    <div className={style.spaceContainer} >
+    <div className={style.spaceContainer}>
 
       <div className={style.profileSection}>
-          <h2> {user.fullname}, Welcome to {space.name}</h2>
+          <h2> {user.fullname}, Welcome to {space.Space.name}</h2>
           <div className={style.profile}> {user.fullname.slice(0,2)} </div>
       </div>    
 
@@ -39,13 +45,14 @@ function Space({ space }) {
       </div>  
     
     <div className={style.activeT}>
-      { activeTab === "Meetings" && <Meetings/> }
-      { activeTab === "Chats" &&    <Messages/> }
-      { activeTab === "History" &&  <History/>}
-      { activeTab === "General" &&  <General/>}
-      { activeTab === "Invoices" &&  <Invoices/>}
+      { activeTab === "Meetings" &&    <Meetings tomorrowsMeeting={TomorrowsMeeting} todaysMeeting={TodaysMeetings} /> }
+      { activeTab === "Chats"    &&    <Messages/>}
+      { activeTab === "History"  &&    <History/>}
+      { activeTab === "General"  &&    <General/>}
+      { activeTab === "Invoices" &&   <Invoices/>}
     </div>
 
+{/* todaysMeeting={space.Space.TodaysMeeting} tomorrowsMeeting={space.Space.TomorrowsMeeting} */}
 
     </div>
   )
