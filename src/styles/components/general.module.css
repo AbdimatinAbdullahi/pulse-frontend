@@ -21,7 +21,7 @@
 
 .membersContainer{
     width: 100%;
-    height: 70%;
+    height: 60%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -34,11 +34,16 @@
     border: 1px solid gray;
     border-radius: 12px;
     padding: 10px;
+    box-sizing: border-box;
+    padding: 0 1em;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .dangerContainer{
     width: 100%;
-    height: calc(100% - 70%);
+    height: calc(100% - 60%);
     border: 1px solid red;
     border-radius: 12px;
 }
@@ -46,4 +51,84 @@
 .activeMembers h2, .activeInvitations h2{
     font-family: var(--font-ubuntu);
     color: gray;
+    margin-top: 1em;
+}
+
+.noMember, .noInvitation{
+    width:100%;
+    height: 70px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    align-self: flex-end;
+    margin-top: 3em;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    padding: 0 1em;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-ubuntu);
+}
+
+
+.noMember button, .noInvitation button{
+    width: 200px;
+    height:80%;
+    background-color: var(--hover-color);
+    font-family: var(--font-secular);
+    color: var(--primary-color);
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    &:hover{
+        background-color: var(--secondary-color);
+        cursor: pointer;
+    }
+}
+
+.inviteButton{
+    position: absolute;
+    bottom: 10px;
+    right: 1em;
+    width: 200px;
+    height:50px;
+    background-color: var(--hover-color);
+    font-family: var(--font-secular);
+    color: var(--primary-color);
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    &:hover{
+        background-color: var(--secondary-color);
+        cursor: pointer;
+    }  
+}
+
+.dangerContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-evenly;
+    box-sizing: border-box;
+    padding: 0.2em 1em;
+}
+
+.leaveWorkspace, .upgradeWorkspace, .deleteWorkspace{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-ubuntu);
+    color: gray;
+}
+
+.leaveWorkspace button, .upgradeWorkspace button, .deleteWorkspace button{
+    width: 200px;
+    height: 40px;
+    background-color: var(--error-color);
+    font-family: var(--font-secular);
+    color: white;
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    cursor: pointer;
 }
