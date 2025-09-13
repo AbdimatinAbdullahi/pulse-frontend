@@ -9,6 +9,7 @@ import Welcome from './pages/Welcome'
 
 
 import { SpaceContextProvider } from './context/SpaceContext'
+import { WorkspaceModalProvider } from './context/WorkspaceModalContext'
 
 
 function App() {
@@ -21,8 +22,11 @@ function App() {
             <Route path='/register' element={<Signup/>}/>
             <Route path='/@me' element={
               <SpaceContextProvider>
+                <WorkspaceModalProvider>
                 <Pulse/>
+                </WorkspaceModalProvider>
               </SpaceContextProvider>
+
             } />
           </Routes>
       </AuthProvider>

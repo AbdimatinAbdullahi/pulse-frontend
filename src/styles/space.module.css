@@ -36,6 +36,8 @@
     font-weight: 800;
     font-size: 2em;
     margin-bottom: 10px;
+    border-bottom: 1px solid gray;
+    position: relative;
 }
 
 .profile{
@@ -49,6 +51,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.warning{
+    width: 54%;
+    height: 50px;
+    position: absolute;
+    bottom: 10px;
+    font-size: 18px;
+    border: 1px solid var(--error-color);
+    color: var(--error-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-ubuntu);
+    font-weight: 700;
+    border-radius: 4px;
 }
 
 .buttonContainer{

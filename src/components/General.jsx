@@ -2,11 +2,13 @@ import React from 'react'
 import style from '../styles/components/general.module.css'
 
 import { useSpaceContext } from '../context/SpaceContext'
+import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 
 function General() {
 
   const { state } = useSpaceContext()
   const { activespace } = state
+  const { openModal } = useWorkspaceModal()
 
   return (
     <div className={style.generalContainer}>
@@ -54,7 +56,7 @@ function General() {
                   <p> If you are no longer member of the space, leave the space </p>
               </div>
               <div className={style.upgradeWorkspace}>
-                  <button> Upgrade workspace </button>
+                  <button onClick={()=>openModal("UPGRADE")} > Upgrade workspace </button>
                   <p> Upgrade or down grade workspace to meet yout needs </p>
               </div>
               <div className={style.deleteWorkspace}>

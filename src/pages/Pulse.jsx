@@ -4,15 +4,18 @@ import style from '../styles/pulse.module.css'
 
 import { useAuth } from '../context/AuthContext'
 import { useSpaceContext } from '../context/SpaceContext'
+import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 
-import CreateSpaceModal from '../modals/CreateSpaceModal'
 import Space from './Space'
+import PaymentModal from '../modals/PaymentModal'
+import CreateSpaceModal from '../modals/CreateSpaceModal'
+
 
 function Pulse() {
 
   const { user }  = useAuth()
   const { state, dispatch, FetchInitialSpacesAndItsData} = useSpaceContext()
-
+  const {  action, closeModal } = useWorkspaceModal()
   const { spaces, activespace } = state;
 
   const [ loading, setLoading ] = useState(false)
@@ -89,7 +92,7 @@ function Pulse() {
         </div>
 
         { createWorkspaceModal && <CreateSpaceModal onClose={()=>setcreateWorkspaceModal(false)} />}
-
+        { action == "UPGRADE" && <PaymentModal onClose={closeModal}  /> }
     </div>
   )
 }

@@ -66,6 +66,15 @@
     }
 }
 
+.inactive{
+    background-color: gray;
+    cursor: not-allowed;
+    &:hover{
+        background-color: gray;
+        cursor: not-allowed;
+    }
+}
+
 .noMeeting{
     aspect-ratio: 1/1;
     height: 320px;
