@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react'
 import style from '../styles/components/meetings.module.css'
+import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 
 function Meetings({ todaysMeeting, tomorrowsMeeting, status}) {
 
-  
+  const { openModal } = useWorkspaceModal()
+
+  const handleOpenModal = ()=>{
+    openModal("MEETING")
+  }
 
   return (
     <div className={style.meetingContainer}>
@@ -22,7 +27,7 @@ function Meetings({ todaysMeeting, tomorrowsMeeting, status}) {
               ) : (
                 <div className={style.meetingsTw} >
                   <div className={style.noMeeting}> No meeting yet</div>
-                  <button className={`${style.createMeeting} ${status == "inactive" && style.inactive} `}> Create Todays Meeting </button>
+                  <button className={`${style.createMeeting}`} onClick={handleOpenModal} > Create Todays Meeting </button>
                 </div>
               )
             }
@@ -43,7 +48,7 @@ function Meetings({ todaysMeeting, tomorrowsMeeting, status}) {
               ) : (
                 <div className={style.meetingsTw} >
                   <div className={style.noMeeting}> No meeting yet</div>
-                  <button className={`${style.createMeeting} ${status == "inactive" && style.inactive} `}  > Create Todays Meeting </button>
+                  <button className={`${style.createMeeting}`}  onClick={handleOpenModal}  > Create Todays Meeting </button>
                 </div>
               )
             }

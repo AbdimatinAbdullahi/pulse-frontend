@@ -102,12 +102,25 @@ export function SpaceContextProvider({children}){
         }
     }
 
+    async function UpgradeWorkspace(price_id, workspace_id) {
+        try {
+            const upgradeRes = await axios.post(`${payment_services_url}/create-checkout-session`, { price_id: price_id, workspace_id: workspace_id})
+            if(upgradeRes.status == 200){
+                console.log("Response:", upgradeRes)
+                return { success: true, url: upgradeRes.data}
+            }
+        } catch (error) {
+            console.error("Error fetching upgrade: ",error)
+            return { success: false}
+        }
+    }
+
 
 
 
     return (
         <SpaceContext.Provider 
-                value={{ state, dispatch, CreateWorkspace, FetchInitialSpacesAndItsData, createCheckoutSession }} >
+                value={{ state, dispatch, CreateWorkspace, FetchInitialSpacesAndItsData, createCheckoutSession, UpgradeWorkspace }} >
             {children}
         </SpaceContext.Provider>
     )

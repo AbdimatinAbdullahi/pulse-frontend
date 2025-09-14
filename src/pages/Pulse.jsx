@@ -9,6 +9,7 @@ import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 import Space from './Space'
 import PaymentModal from '../modals/PaymentModal'
 import CreateSpaceModal from '../modals/CreateSpaceModal'
+import CreateMeetingModal from '../modals/CreateMeetingModal'
 
 
 function Pulse() {
@@ -93,6 +94,7 @@ function Pulse() {
 
         { createWorkspaceModal && <CreateSpaceModal onClose={()=>setcreateWorkspaceModal(false)} />}
         { action == "UPGRADE" && <PaymentModal onClose={closeModal}  /> }
+        { action == "MEETING" && <CreateMeetingModal onClose={closeModal} Space={activespace} /> }
     </div>
   )
 }

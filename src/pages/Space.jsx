@@ -40,7 +40,7 @@ function Space({ space }) {
       <div className={style.buttonContainer}>
           <button className={style.tabsSelectors} onClick={()=>handleTabsClick("Meetings")} > {activeTab == "Meetings" && <span className={style.activeTab} ></span> } Meetings </button>
           <button className={style.tabsSelectors} onClick={()=>handleTabsClick("Chats")}  > {activeTab == "Chats" && <span className={style.activeTab} ></span> } Chats and Messages </button>
-          <button className={style.tabsSelectors} onClick={()=>handleTabsClick("History")}> {activeTab == "History" && <span className={style.activeTab} ></span> } History </button>
+          <button className={style.tabsSelectors} onClick={()=>handleTabsClick("AllMeetings")}> {activeTab == "History" && <span className={style.activeTab} ></span> } All Meetings </button>
           <button className={style.tabsSelectors} onClick={()=>handleTabsClick("General")}> {activeTab == "General" && <span className={style.activeTab} ></span> } General </button>
           <button className={style.tabsSelectors} onClick={()=>handleTabsClick("Invoices")}> {activeTab == "Invoices" && <span className={style.activeTab} ></span> } Invoices </button>
       </div>  
@@ -48,7 +48,7 @@ function Space({ space }) {
     <div className={style.activeT}>
       { activeTab === "Meetings" &&    <Meetings tomorrowsMeeting={TomorrowsMeeting} todaysMeeting={TodaysMeetings} status={activespace.Space.status} /> }
       { activeTab === "Chats"    &&    <Messages/>}
-      { activeTab === "History"  &&    <History/>}
+      { activeTab === "AllMeetings" && <History/>}
       { activeTab === "General"  &&    <General/>}
       { activeTab === "Invoices" &&   <Invoices/>}
     </div>
