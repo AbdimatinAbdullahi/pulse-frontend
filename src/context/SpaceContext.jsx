@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { act, createContext, useContext, useEffect, useReducer } from 'react'
+import { createContext, useContext, useReducer } from 'react'
 
 const SpaceContext = createContext() 
 
@@ -8,7 +8,6 @@ const initialState = {
     activespace: null,
 }
 
-const meeting_services_url = import.meta.env.VITE_MEETING_SERVICE_URL
 const payment_services_url = import.meta.env.VITE_PAYMENT_SERVICE_URL
 const room_services_url = import.meta.env.VITE_ROOM_SERVICE_URL
 
@@ -75,7 +74,6 @@ export function SpaceContextProvider({children}){
 
     async function CreateWorkspace(data) {
         const { name, description, creator } = data;
-        console.log("Creator:", creator);
 
         try {
             const result = await CheckIfUserHasWorkspace(creator);
@@ -116,11 +114,37 @@ export function SpaceContextProvider({children}){
     }
 
 
+    async function CreateMeeting({tittle, description, startTime, duration, spaceId, CreatorID}){
+        
+        try {
+            const createMeetingRes = await axios.post(`${room_services_url}/create-meeting`,{
+                tittle: tittle,
+                description: description,
+                date: startTime,
+                spaceid: spaceId,
+                hostid: CreatorID
+            })
+
+            if(createMeetingRes.status == 200){
+                if(createMeetingRes.data.meeting.date == new Date()){
+                    dispatch({type: "ADD_MEETING_TODAY", payload: createMeetingRes.data.meeting})
+                }
+            }
+
+        } catch (error) {
+            console.error("Create meeting error: ", error)
+        }
+
+    }
+
 
 
     return (
         <SpaceContext.Provider 
-                value={{ state, dispatch, CreateWorkspace, FetchInitialSpacesAndItsData, createCheckoutSession, UpgradeWorkspace }} >
+            value={{ 
+                state, dispatch, CreateWorkspace, FetchInitialSpacesAndItsData, 
+                createCheckoutSession, UpgradeWorkspace, CreateMeeting 
+                }} >
             {children}
         </SpaceContext.Provider>
     )

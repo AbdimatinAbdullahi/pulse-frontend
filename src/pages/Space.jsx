@@ -6,18 +6,14 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import Meetings from '../components/Meetings'
 import Messages from '../components/Messages'
-import Invoices from '../components/Invoices'
 import History from '../components/History'
 import General from '../components/General'
 import { useSpaceContext } from '../context/SpaceContext'
-import { X } from 'lucide-react'
-import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 
 function Space({ space }) {
 
   const { user } = useAuth()
   const { state } = useSpaceContext()
-    const { closeModal } = useWorkspaceModal()
   const {  activespace } = state
   const { TodaysMeetings, TomorrowsMeeting  } = activespace;
 
@@ -42,7 +38,6 @@ function Space({ space }) {
           <button className={style.tabsSelectors} onClick={()=>handleTabsClick("Chats")}  > {activeTab == "Chats" && <span className={style.activeTab} ></span> } Chats and Messages </button>
           <button className={style.tabsSelectors} onClick={()=>handleTabsClick("AllMeetings")}> {activeTab == "History" && <span className={style.activeTab} ></span> } All Meetings </button>
           <button className={style.tabsSelectors} onClick={()=>handleTabsClick("General")}> {activeTab == "General" && <span className={style.activeTab} ></span> } General </button>
-          <button className={style.tabsSelectors} onClick={()=>handleTabsClick("Invoices")}> {activeTab == "Invoices" && <span className={style.activeTab} ></span> } Invoices </button>
       </div>  
     
     <div className={style.activeT}>
@@ -50,7 +45,6 @@ function Space({ space }) {
       { activeTab === "Chats"    &&    <Messages/>}
       { activeTab === "AllMeetings" && <History/>}
       { activeTab === "General"  &&    <General/>}
-      { activeTab === "Invoices" &&   <Invoices/>}
     </div>
 
 

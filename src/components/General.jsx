@@ -55,10 +55,6 @@ function General() {
                   <button> Leave workspace </button>
                   <p> If you are no longer member of the space, leave the space </p>
               </div>
-              <div className={style.upgradeWorkspace}>
-                  <button onClick={()=>openModal("UPGRADE")} > Upgrade workspace </button>
-                  <p> Upgrade or down grade workspace to meet yout needs </p>
-              </div>
               <div className={style.deleteWorkspace}>
                   <button> Delete workspace </button>
                   <p> *This action is permanent and cant be reversed. You will lose all the data, members, messages and meetings </p>

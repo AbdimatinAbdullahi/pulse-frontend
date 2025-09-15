@@ -46,6 +46,65 @@
     display: flex;
     flex-direction: row;
     padding: 4px 4px;
+    gap: 10px;
+}
+
+.meeting{
+    width: 320px;
+    aspect-ratio: 1/1;
+    border: 1px solid gray;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 1em 0.3em;
+    gap: 10px;
+}
+
+.meeting h2{
+    font-family: var(--font-ubuntu);
+    color: black;
+    font-size: 20px;
+
+}
+
+.meeting span{
+    width: 100%;
+    flex-grow: 1;
+    font-family: var(--font-ubuntu);
+    font-size: 18px;
+    color: gray;
+    font-weight: 500;
+
+}
+.meetingD{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+.meetingD div{
+    font-family: var(--font-lato);
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--hover-color);
+}
+
+.meetingD button{
+    height: 100%;
+    width: 40%;
+    background-color: gray;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    font-family: var(--font-secular);
+    color: white;
+    cursor: pointer;
 }
 
 .createMeeting{

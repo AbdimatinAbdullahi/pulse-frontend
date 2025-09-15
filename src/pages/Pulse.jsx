@@ -26,16 +26,11 @@ function Pulse() {
     if(!user.id) return
     async function fetchWorkspaces(){
       setLoading(true)
-      console.log("User id: ", user.id)
       await FetchInitialSpacesAndItsData(user.id)
       setLoading(false)
     }
     fetchWorkspaces()
   }, [user])
-
-  useEffect(()=>{
-    console.log("Active space: ", activespace)
-  }, [activespace])
 
 
   const handleSpaceClick = (space)=>{
