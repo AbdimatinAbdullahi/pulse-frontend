@@ -10,22 +10,19 @@ function Space() {
   const [activePage, setActivePage] = useState("chat")
 
   const handleTab =(activepage)=>{
-    if(activepage === "" || activepage) return
+    if(activepage === "" && activepage === activePage) return
     setActivePage(activepage)
   }
 
   return (
     <div className={style.spaceContainer}>
         <div className={style.navbar}>
-            <div> <MessageCircleMore size={40} onClick={()=> handleTab("chat")} /> </div>
-            <div> <Video size={40}onClick={()=> handleTab("chat")} /> </div>
+            <MessageCircleMore size={40} className={style.navIcons}  onClick={()=> handleTab("chat")} />
+            <Video size={40}  className={style.navIcons}   onClick={()=> handleTab("meet")} />
         </div>
 
       { activePage === "chat" && <Chat/> }
       { activePage === "meet" && <Meet/> }
-
-    <h1>Testing</h1>
-
     </div>
   )
 }

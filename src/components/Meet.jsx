@@ -1,8 +1,11 @@
 import React from 'react'
+import style from '../styles/components/meet.module.css'
 
 function Meet() {
   return (
-    <div>Meet</div>
+    <div className={style.meetContainer}>
+      
+    </div>
   )
 }
 

@@ -1,8 +1,13 @@
 import React from 'react'
+import style from '../styles/components/chat.module.css'
+
+import ChatBar from './ChatBar'
 
 function Chat() {
   return (
-    <div>Chat</div>
+    <div className={style.chatContainer} >
+      <ChatBar/>
+    </div>
   )
 }
 

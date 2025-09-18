@@ -1,0 +1,17 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #cc00ff;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+}
+
+
+.meetContainer{
+    flex-grow: 1;
+    height: 100%;
+    background-color: #cc00ff;
+}

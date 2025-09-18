@@ -16,4 +16,40 @@
     display: flex;
     flex-direction: column;
     border-radius: 12px;
+    gap: 10px;
+    box-sizing: border-box;
+    padding: 1em 0.4em;
+}
+
+.header{
+    font-family: var(--hover-color);
+    font-size: 2em;
+    font-family: var(--font-secular);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spaces{
+    width: 100%;
+    height: 50px;
+    border: 1px solid var(--hover-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-secular);
+    color: black;
+    position: relative;
+    cursor: pointer;
+}
+
+.activeSpace{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border: 3px solid var(--hover-color);
+    width: 3px;
 }
