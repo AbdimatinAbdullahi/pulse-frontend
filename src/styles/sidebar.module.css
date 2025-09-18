@@ -8,3 +8,12 @@
     --success-color: #16A34A;
     --error-color: #DC2626;
 }
+
+.sidebarContainer{
+    width: 20%;
+    height: 100%;
+    border: 1px solid var(--hover-color);
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+}

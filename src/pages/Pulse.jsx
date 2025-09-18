@@ -1,95 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import style from '../styles/pulse.module.css' 
-
-
-import { useAuth } from '../context/AuthContext'
-import { useSpaceContext } from '../context/SpaceContext'
-import { useWorkspaceModal } from '../context/WorkspaceModalContext'
-
-import Space from './Space'
-import PaymentModal from '../modals/PaymentModal'
-import CreateSpaceModal from '../modals/CreateSpaceModal'
-import CreateMeetingModal from '../modals/CreateMeetingModal'
+import React from 'react'
+import SideBar from '../components/SideBar'
+import Space from '../components/Space'
+import style from '../styles/pulse.module.css'
 
 
 function Pulse() {
-
-  const { user }  = useAuth()
-  const { state, dispatch, FetchInitialSpacesAndItsData} = useSpaceContext()
-  const {  action, closeModal } = useWorkspaceModal()
-  const { spaces, activespace } = state;
-
-  const [ loading, setLoading ] = useState(false)
-  const [ createWorkspaceModal, setcreateWorkspaceModal ] = useState(false)
-
-  useEffect(()=>{
-    if(!user.id) return
-    async function fetchWorkspaces(){
-      setLoading(true)
-      await FetchInitialSpacesAndItsData(user.id)
-      setLoading(false)
-    }
-    fetchWorkspaces()
-  }, [user])
-
-
-  const handleSpaceClick = (space)=>{
-    console.log("Clicked space", space)
-    if(activespace.id == space.Space.id) return
-    dispatch({type: "SELECT_ACTIVE_SPACE", payload: space})
-  }
-
-
   return (
     <div className={style.pulseContainer} >
-        <div className={style.sidebarContainer}>
-            <div className={style.headerPulse}>
-                Pulse: Where meeting happens
-            </div>
-
-          { loading ? (
-              <div>Loading ...</div>
-              ) : spaces.length > 0 ? (
-                spaces.map((space) => (
-                    <div key={space.Space.id} className={style.tabs} onClick={()=>handleSpaceClick(space)} > 
-                      { activespace && activespace.id == space.Space.id && <span className={style.activeTab}></span>}
-                      {space.Space?.name}
-                    </div>
-                ))
-                
-              ) : (
-                <>
-                  <div className={style.tabs}>Join Space</div>
-                  <div className={style.tabs} onClick={() => setcreateWorkspaceModal(true)}> Create space</div>
-                </>
-              )}
-
-            { !loading && (
-              <>
-                <div className={style.tabs} onClick={() => setcreateWorkspaceModal(true)}> Create space</div>
-                <div className={style.tabs}> Join space </div>
-              </>
-            )}
-
-        </div>
-
-        <div className={style.spaceContainer}>
-          {
-             loading ? (
-              <div> Loading ... </div> 
-             ) : (
-                activespace ? (
-                  <Space space={activespace} />
-                ) : (
-                  <div> No active space </div>
-                )
-             )
-          }
-        </div>
-
-        { createWorkspaceModal && <CreateSpaceModal onClose={()=>setcreateWorkspaceModal(false)} />}
-        { action == "UPGRADE" && <PaymentModal onClose={closeModal}  /> }
-        { action == "MEETING" && <CreateMeetingModal onClose={closeModal} Space={activespace} /> }
+      <SideBar/>
+      <Space/>
     </div>
   )
 }

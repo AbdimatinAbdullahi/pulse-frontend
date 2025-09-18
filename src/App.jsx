@@ -2,14 +2,10 @@ import React from 'react'
 import { AuthProvider } from '../src/context/AuthContext'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import Pulse from './pages/Pulse'
 import Login from '../src/pages/Login'
 import Signup from '../src/pages/Signup'
 import Welcome from './pages/Welcome'
-
-
-import { SpaceContextProvider } from './context/SpaceContext'
-import { WorkspaceModalProvider } from './context/WorkspaceModalContext'
+import Pulse from './pages/Pulse'
 
 
 function App() {
@@ -20,14 +16,7 @@ function App() {
             <Route path='/' element={<Welcome/>}/>
             <Route path='/login' element={<Login/>}/>
             <Route path='/register' element={<Signup/>}/>
-            <Route path='/@me' element={
-              <SpaceContextProvider>
-                <WorkspaceModalProvider>
-                <Pulse/>
-                </WorkspaceModalProvider>
-              </SpaceContextProvider>
-
-            } />
+            <Route path='/@me' element={<Pulse/>}/>
           </Routes>
       </AuthProvider>
     </BrowserRouter>
