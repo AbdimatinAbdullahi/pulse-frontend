@@ -1,0 +1,68 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #cc00ff;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+}
+
+.meeting{
+    width: 500px;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0.6em;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+
+.icon{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cc00ff;
+    background-color: rgba(241, 204, 253, 0.3);
+}
+
+.meeting h3{
+    font-family: var(--font-lato);
+    font-size: 30px;
+}
+
+.datesandwho{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.date{
+    font-size: 20px;
+    color: black;
+    font-family: var(--font-ubuntu);
+}
+
+.join{
+    width: 100%;
+    height: 50px;
+    border-radius: 4px;
+    background-color: rgba(233, 233, 233, 0.6);
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-family: var(--font-lato);
+    font-weight: 800;
+    font-size: 20px;
+    cursor: pointer;
+}

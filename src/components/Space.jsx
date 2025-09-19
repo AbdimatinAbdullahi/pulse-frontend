@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import style from '../styles/space.module.css'
-import { MessageCircleMore, Video } from 'lucide-react'
+import { MessageCircleMore, Video, Settings } from 'lucide-react'
 
 import Chat from './Chat'
 import Meet from './Meet'
@@ -17,8 +17,9 @@ function Space() {
   return (
     <div className={style.spaceContainer}>
         <div className={style.navbar}>
-            <MessageCircleMore size={40} className={style.navIcons}  onClick={()=> handleTab("chat")} />
-            <Video size={40}  className={style.navIcons}   onClick={()=> handleTab("meet")} />
+            <MessageCircleMore size={45} className={style.icon}  onClick={()=> handleTab("chat")} />
+            <Video size={45}  className={style.icon}   onClick={()=> handleTab("meet")} />
+            <Settings className={style.icon} size={45} />
         </div>
 
       { activePage === "chat" && <Chat/> }

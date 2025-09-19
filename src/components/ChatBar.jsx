@@ -5,12 +5,11 @@ import { Settings } from 'lucide-react'
 function ChatBar() {
   return (
     <div className={style.chatbarContainer} >
-        <h2>Space One</h2>
+        <h2> spaceone.com </h2>
 
         <div className={style.meetingButtons}>
             <button>Instant Meeting</button>
             <button>Schedule Meeting</button>
-            <Settings className={style.icon} size={50} />
         </div>
     </div>
   )

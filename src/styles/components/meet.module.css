@@ -13,5 +13,96 @@
 .meetContainer{
     flex-grow: 1;
     height: 100%;
-    background-color: #cc00ff;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    gap: 10px;
+    box-sizing: border-box;
+    padding: 1em 1em;
+    background-color: rgba(52, 0, 68, 0.107);
+}
+
+.meetingItems{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-evenly;
+}
+
+.meetingItems h3{
+    font-family: var(--font-ubuntu);
+    font-size: 30px;
+    color: black;
+}
+
+
+.actionButton{
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+.meetingButton{
+    width: 350px;
+    height: 70px;
+    background-color: var(--primary-color);
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: 0.2fr 1fr;
+    align-items: center;
+    font-family: var(--font-lato);
+    font-size: 20px;
+    font-weight: 700;
+    color: #9900cc;
+    box-sizing: border-box;
+    padding: 0 0.3em;
+    &:hover{
+        background-color: var(--hover-color);
+        color: white;
+        cursor: pointer;
+    }
+}
+
+
+.todaysMeeting, .scheduledMeeting{
+    width: 100%;
+    height: calc((100% - 200px) / 2);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-x: hidden;
+}
+
+.todaysMeeting h3, .scheduledMeeting h3{
+    font-family: var(--font-ubuntu);
+    font-size: 30px;
+    color: black;
+}
+
+/* .meetings{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    overflow: hidden;
+    border: 1px solid red;
+    flex: 1 1 auto; /* allow shrinking */
+    /* min-width: 0;   critical: lets flexbox shrink below content size */
+    /* overflow: hidden; */
+/* } */
+
+
+.meetings {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    max-width: 100%;
+    flex-grow: 1;
 }

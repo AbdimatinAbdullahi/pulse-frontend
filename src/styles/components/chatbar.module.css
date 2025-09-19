@@ -18,11 +18,12 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 1em;
 }
 
 .chatbarContainer h2{
     font-family: var(--font-lato);
-    margin-left: 1em;
     font-weight: 900;
 }
 
@@ -50,10 +51,3 @@
     }
 }
 
-.icon{
-    color: gray;
-    cursor: pointer;
-    &:hover{
-        color: var(--hover-color);
-    }
-}

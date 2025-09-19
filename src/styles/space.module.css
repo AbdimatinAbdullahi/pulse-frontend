@@ -29,9 +29,12 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    padding-top: 10px;
+    padding-top: 1em;
 }
-
-.navIcons{
+.icon{
+    color: gray;
     cursor: pointer;
+    &:hover{
+        color: var(--hover-color);
+    }
 }
