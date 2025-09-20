@@ -29,12 +29,15 @@
 
 .meetingButtons{
     height: 100%;
-    width: fit-content;
+    min-width: 600px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-evenly;
     gap: 10px;
+    position: relative;
 }
+
 
 .meetingButtons button{
     width: 200px;
@@ -51,3 +54,93 @@
     }
 }
 
+
+/* Instand Meeting Modal  */
+.instantMeetingContainer{
+    width: 600px;
+    min-height: 150px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    position: absolute;
+    top: 110%;
+    box-shadow: 0 0 5px 2px rgb(130, 130, 130, 0.2);
+    box-sizing: border-box;
+    padding: 1em 0.6em;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.title span{
+    font-family: var(--font-ubuntu);
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.xloseIcon{
+    top: 10px;
+    right: 10px;
+    color: black;
+    cursor: pointer;
+}
+
+.inputTittle{
+    width: 100%;
+    height: 50px;
+    border: 1px solid gray;
+    outline: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 0 0.4em;
+    font-family: var(--font-ubuntu);
+    font-size: 19px;
+    font-weight: 600;
+    color: gray;
+    &:focus{
+        border-bottom: 5px solid var(--hover-color);
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+}
+
+.joiners{
+    width: 100%;
+    height: 50px;
+    font-family: var(--font-ubuntu);
+    font-weight: 500;
+    color: gray;
+    font-size: 19px;
+    box-sizing: border-box;
+    padding: 0 0.4em;
+    outline: none;
+    border-radius: 4px;
+    &:focus{
+        border-bottom: 5px solid var(--hover-color);
+    }
+}
+
+.createMeeting{
+    width: 100%;
+    height: 50px;
+    background-color: var(--hover-color);
+    font-family: var(--font-secular);
+    color: white;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover{
+        background-color: var(--secondary-color);
+    }
+}

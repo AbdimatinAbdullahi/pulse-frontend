@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import style from '../styles/components/meet.module.css'
 import { CalendarCheck2, Link2, MousePointer2 } from 'lucide-react'
 import Meeting from './Meeting'
+import  { InstantMeetingContainer } from './ChatBar'
+
 
 function Meet() {
+
+  const [ InstantMeetingModalOpen, setInstantMeetingModalOpen ] = useState(false)
+
   return (
     <div className={style.meetContainer}>
       
@@ -12,21 +17,23 @@ function Meet() {
 
           <div className={style.actionButton}>
 
-            <div className={style.meetingButton} >
+            <div className={style.meetingButton} onClick={()=>setInstantMeetingModalOpen(!InstantMeetingModalOpen)} >
               <Link2 size={30} strokeWidth={2.5}/>
                <span>Create Instant Meeting Link</span>
             </div>
+
 
             <div className={style.meetingButton} >
               <CalendarCheck2 size={30} strokeWidth={2.5}  />
               <span>Schedule a meeting</span>
             </div>
-
             
             <div className={style.meetingButton} >
               <MousePointer2 size={30} strokeWidth={2.5} />
               <span>Join a meeting via Link</span>
             </div>
+
+          { InstantMeetingModalOpen && <InstantMeetingContainer onClose={()=>setInstantMeetingModalOpen(false)} /> }
 
           </div>
 
