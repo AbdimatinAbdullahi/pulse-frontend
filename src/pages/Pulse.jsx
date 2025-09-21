@@ -2,7 +2,6 @@ import React from 'react'
 
 import SideBar from '../components/SideBar'
 import Space from '../components/Space'
-import MeetingModal from '../modals/MeetingModal'
 import style from '../styles/pulse.module.css'
 
 import { useWorkspaceModal } from '../context/WorkspaceModalContext'
