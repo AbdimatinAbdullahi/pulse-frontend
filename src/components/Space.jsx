@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import style from '../styles/space.module.css'
-import { MessageCircleMore, Video, Settings } from 'lucide-react'
+import {  MessageCircleMore, Video, Settings } from 'lucide-react'
+import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 
 import Chat from './Chat'
 import Meet from './Meet'
+import MeetingModal from '../modals/MeetingModal'
 
 function Space() {
 
   const [activePage, setActivePage] = useState("chat")
+    const { action, closeModal } = useWorkspaceModal()
 
   const handleTab =(activepage)=>{
     if(activepage === "" && activepage === activePage) return
@@ -24,6 +27,9 @@ function Space() {
 
       { activePage === "chat" && <Chat/> }
       { activePage === "meet" && <Meet/> }
+
+      { action === "meeting" && <MeetingModal onClose={closeModal} /> }
+
     </div>
   )
 }

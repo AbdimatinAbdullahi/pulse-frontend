@@ -3,10 +3,12 @@ import style from '../styles/components/meet.module.css'
 import { CalendarCheck2, Link2, MousePointer2 } from 'lucide-react'
 import Meeting from './Meeting'
 import  { InstantMeetingContainer } from './ChatBar'
+import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 
 
 function Meet() {
 
+  const { openModal } = useWorkspaceModal()
   const [ InstantMeetingModalOpen, setInstantMeetingModalOpen ] = useState(false)
 
   return (
@@ -23,7 +25,7 @@ function Meet() {
             </div>
 
 
-            <div className={style.meetingButton} >
+            <div className={style.meetingButton} onClick={()=>openModal("meeting")} >
               <CalendarCheck2 size={30} strokeWidth={2.5}  />
               <span>Schedule a meeting</span>
             </div>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import style from '../styles/components/chatbar.module.css'
 import { X } from 'lucide-react'
+import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 
 function ChatBar() {
 
   const [ InstanstMeetingModalOpen, setInstanstMeetingModalOpen ] = useState(false)
+  const {  openModal } = useWorkspaceModal()
 
   return (
     <div className={style.chatbarContainer} >
@@ -16,7 +18,7 @@ function ChatBar() {
               
           { InstanstMeetingModalOpen && <InstantMeetingContainer  onClose={()=>setInstanstMeetingModalOpen(false)} /> }
 
-            <button > Schedule Meeting </button>
+            <button onClick={()=>openModal("meeting")} > Schedule Meeting </button>
         
         </div>
 
