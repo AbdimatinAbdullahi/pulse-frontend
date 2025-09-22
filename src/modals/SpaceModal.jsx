@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import style from '../styles/modals/spacemodal.module.css'
-import { Activity, CircleOff, Hourglass, Settings, Trash, X } from 'lucide-react'
+import { Activity, CircleOff, Hourglass, Settings, Trash, UserPlus, X } from 'lucide-react'
 
 function SpaceModal({ onClose }) {
 
@@ -112,7 +112,24 @@ function SpaceModal({ onClose }) {
                 ) }
 
               <button> Invite to space </button>
-            </div>      
+            </div>    
+
+
+            <div className={style.timeZone2}>
+                <div className={style.icon}>
+                  <UserPlus/>
+                </div>
+
+                <div className={style.section22}>
+                    <h3>Enter the email of the person you want to invite</h3>
+                    <input type="text" placeholder='Enter the email of person you want to invite' />
+                </div>
+                
+                <div className={style.inviteButton}>
+
+                </div>
+
+            </div>  
         
         </div>
     </div>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import style from '../styles/modals/user.module.css'
-import { CircleOff, LogOut, Moon, Trash, X } from 'lucide-react'
-
+import { CircleOff, LogOut, Moon, SquarePen, Trash, X } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 function UserModal({ onClose }) {
 
   const [spaces, setspaces] = useState(["Space One", "Space two", "Space three"])
   // const [spaces, setspaces] = useState([])
+
+  const { logout } = useAuth()
 
   return (
     <div className={style.userOverLay} >
@@ -58,11 +60,29 @@ function UserModal({ onClose }) {
             </div>
 
             <div className={style.lgout} >
-                  <div className={style.logoutIcon}>
+                  <div className={style.logoutIcon} onClick={logout} >
                     <LogOut/>
                   </div>
 
                   <h3> Logout </h3>
+
+            </div>
+
+            <div className={style.lgout2} >
+                  <div className={style.logoutIcon}>
+                    <SquarePen/>
+                  </div>
+
+                  <div className={style.inputContainer} >
+                      <span> Paste the code sent to your email </span>
+                      <input type="text" placeholder='Paste the code here' />
+                  </div>
+
+                  <div className={style.acceptButton} >
+                      Join
+                  </div>
+
+
 
             </div>
 
