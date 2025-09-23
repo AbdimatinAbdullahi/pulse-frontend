@@ -1,0 +1,59 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #cc00ff;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+}
+
+
+.memberContainer{
+    width: 70%;
+    min-height: 70px;
+    height: auto;
+    border: 1px solid rgba(128, 128, 128, 0.359);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    box-sizing: border-box;
+    padding-right: 1em;
+}
+.memberSecOne{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0.2em 0.5em;
+    color: gray;
+}
+
+.memberSecOne span{
+    font-family: var(--font-ubuntu);
+    font-weight: 500;
+    color: gray;
+}
+
+.memberSecTwo{
+    align-self: center;
+    font-family: var(--font-lato);
+    font-weight: 600;
+    color: #9900cc;
+}
+
+.iconRemove{
+    width: 50px;
+    aspect-ratio: 1/1;
+    background-color: #fc8888;
+    color: #DC2626;
+    border-radius: 4px;
+    align-self: center;
+    justify-self:flex-end ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid red;
+}

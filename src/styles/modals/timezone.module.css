@@ -1,0 +1,55 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #cc00ff;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+}
+.timeZone{
+    display: grid;
+    border: 1px solid gray;
+    border-radius: 4px;
+    height: 100px;
+    width: 100%;
+    grid-template-columns: 0.1fr 0.8fr 0.4fr;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 1em;
+    justify-content: space-between;
+    margin-top: 60px;
+}
+
+.timeZone .icon{
+    width: 60px;
+    aspect-ratio: 1/1;
+    background-color: #9900cc;
+    color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section2{
+    font-family: var(--font-ubuntu);
+    font-size: 20px;
+    color: rgb(60, 60, 60);
+}
+.timeZone select{
+    height: 60px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 4px;
+    font-family: var(--font-ubuntu);
+    font-size: 18px;
+    outline: none;
+    font-weight: 700;
+    box-sizing: border-box;
+    padding: 0 1em;
+    &:focus{
+        border-bottom: 5px solid var(--hover-color);
+    }
+}
