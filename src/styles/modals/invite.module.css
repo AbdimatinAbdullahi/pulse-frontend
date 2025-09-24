@@ -30,15 +30,20 @@
     color: gray;
 }
 
-.memberSecOne span{
+.memberSecOne h3{
     font-family: var(--font-ubuntu);
     font-weight: 500;
     color: gray;
 }
 
+.memberSecOne span{
+    font-family: var(--font-ubuntu);
+    color: gray;
+}
+
 .memberSecTwo{
     align-self: center;
-    font-family: var(--font-lato);
+    font-family: var(--font-secular);
     font-weight: 600;
     color: #9900cc;
 }

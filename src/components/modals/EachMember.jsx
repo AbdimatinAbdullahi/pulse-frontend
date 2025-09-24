@@ -1,6 +1,6 @@
 import React from "react";
-import style from '../../styles/modals/invite.module.css'
 import { Trash } from "lucide-react";
+import style from '../../styles/modals/invite.module.css'
 
 function EachMember() {
   return (
