@@ -37,12 +37,14 @@ function SpaceModal({ onClose }) {
         {/* Time Zone Header */}
         <Timezone />
 
+
+
         {/* Space Members */}
         <div className={style.spaceMembers}>
           <h3> Members </h3>
          {members.length > 0 ? (
-            members.map((member) => (
-            <EachMember/>
+            members.map((member, index) => (
+            <EachMember index={index} />
             ))
           ) : (
             <div className={style.noMember}>

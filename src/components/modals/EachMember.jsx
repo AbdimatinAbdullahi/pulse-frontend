@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Trash } from "lucide-react";
 import style from '../../styles/modals/invite.module.css'
+import Spinner from "../Spinner";
 
-function EachMember() {
+function EachMember({ index }) {
+
+  const [loading, setLoading] = useState(false)
+
+
   return (
     <div className={style.memberContainer}>
       <div className={style.memberSecOne}>
@@ -13,7 +18,7 @@ function EachMember() {
       <div className={style.memberSecTwo}>Admin</div>
 
       <div className={style.iconRemove}>
-        <Trash />
+        { loading ? <Spinner/> : <Trash/> }
       </div>
     </div>
   );

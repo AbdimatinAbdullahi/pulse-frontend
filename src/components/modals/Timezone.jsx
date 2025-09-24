@@ -1,8 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import style from '../../styles/modals/timezone.module.css'
 import { Hourglass } from 'lucide-react'
 
 function Timezone() {
+
+
+  const commonTimezones = [
+  { label: "UTC", value: "Etc/UTC" },
+  { label: "New York (US Eastern)", value: "America/New_York" },
+  { label: "Los Angeles (US Pacific)", value: "America/Los_Angeles" },
+  { label: "London (UK)", value: "Europe/London" },
+  { label: "Berlin (Central Europe)", value: "Europe/Berlin" },
+  { label: "Nairobi (East Africa)", value: "Africa/Nairobi" },
+  { label: "Dubai (Gulf)", value: "Asia/Dubai" },
+  { label: "Mumbai (India)", value: "Asia/Kolkata" },
+  { label: "Singapore", value: "Asia/Singapore" },
+  { label: "Tokyo (Japan)", value: "Asia/Tokyo" }
+  ];
+
+  const [selectedTimeZone, setSelectedTimeZone] = useState(null)
+
+
+
+
   return (
      <div className={style.timeZone}>
         
@@ -15,12 +35,10 @@ function Timezone() {
             <span> The current time zone is: Nairobi GMT +3 </span>
         </div>
 
-        <select>
-            <option value="" hidden selected> Select Time zone </option>
-            <option value=""> Nairobi GMT +3 </option>
-            <option value=""> Beiien GMT +12 </option>
-            <option value=""> USA GMT -12 </option>
-            <option value=""> Riyadh -3 </option>
+        <select value={selectedTimeZone} onChange={(e)=>setSelectedTimeZone(e.target.value)}  >
+            { commonTimezones.map((timezone)=>(
+              <option value={timezone.value}> {timezone.label} </option>
+            )) }
         </select>
 
     </div>
