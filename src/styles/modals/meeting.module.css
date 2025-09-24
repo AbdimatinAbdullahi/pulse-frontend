@@ -24,10 +24,13 @@
 
 .meetingModalContainer{
     width: 60%;
-    height: 800px;
+    height: 500px;
     background-color: white;
     border-radius: 12px;
+    display: flex;
+    flex-direction: column;
 }
+
 
 .meetnavBar{
     width: 100%;
@@ -106,5 +109,81 @@
     cursor:pointer;
     &:hover{
         background-color: #f4d3ff;
+    }
+}
+
+.inputContainer, .dates, .repeatContainer, .presentContainer{
+    display: grid;
+    grid-template-columns: 0.1fr 2fr;
+    align-items: start;
+    margin-left: 1em;
+    margin-top: 10px;
+    height: fit-content;
+}
+
+.inputContainer input, .presentContainer select{
+    width: 90%;
+    height: 60px;
+    border: 1px solid var(--hover-color);
+    box-sizing: border-box;
+    padding-left: 1em;
+    font-family: var(--font-secular);
+    border-radius: 4px;
+    outline: none;
+    font-size: 18px;
+}
+
+.datesContainer{
+    width: 50%;
+    display:flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.datesContainer .startTime, .datesContainer .endTime{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.startTime input[type="date"], .endTime input[type="date"]{
+    width: 400px;
+    height: 60px;
+    border: 1px solid var(--hover-color);
+    font-family: var(--font-secular);
+    font-size: 18px;
+    box-sizing: border-box;
+    padding: 0 1em;
+    border-radius: 4px;
+    outline: none;
+}
+
+.hour{
+    width: 100px;
+    height: 60px;
+    border: 1px solid var(--hover-color);
+    border-radius: 4px;
+    font-family: var(--font-secular);
+    font-size: 18px;
+    outline: none;
+}
+
+.createMeeting{
+    width: 90%;
+    height: 60px;
+    border-radius: 4px;
+    color: white;
+    font-size: 20px;
+    background-color: #9900cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    margin-top: 20px;
+    font-family: var(--font-secular);
+    cursor: pointer;
+    &:hover{
+        background-color: #cc00ff;
     }
 }
