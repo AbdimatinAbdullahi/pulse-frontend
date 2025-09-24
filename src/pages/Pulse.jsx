@@ -9,7 +9,9 @@ import UserModal from '../modals/UserModal'
 import CreateSpace from '../modals/CreateSpace'
 
 function Pulse() {
+
   const { action, closeModal } = useWorkspaceModal()
+  
   return (
     <div className={style.pulseContainer} >
       <SideBar/>

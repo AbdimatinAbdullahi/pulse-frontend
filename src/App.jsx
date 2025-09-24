@@ -7,6 +7,7 @@ import Signup from '../src/pages/Signup'
 import Welcome from './pages/Welcome'
 import Pulse from './pages/Pulse'
 import { WorkspaceModalProvider } from './context/WorkspaceModalContext'
+import { SpaceContextProvider } from './context/SpaceContext'
 
 
 function App() {
@@ -18,9 +19,14 @@ function App() {
             <Route path='/' element={<Welcome/>}/>
             <Route path='/login' element={<Login/>}/>
             <Route path='/register' element={<Signup/>}/>
-            <Route path='/@me' element={<Pulse/>}/>
+            <Route path='/@me' element={
+              <SpaceContextProvider>
+                <Pulse/>
+              </SpaceContextProvider>
+            }/>
           </Routes>
         </WorkspaceModalProvider>
+        
       </AuthProvider>
     </BrowserRouter>
   )
