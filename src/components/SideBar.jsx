@@ -19,8 +19,8 @@ function SideBar() {
         Space One
       </div>
 
-      <div className={style.spaces}>
-        Space Two
+      <div className={style.spaces} onClick={()=>openModal("create")} >
+        Create space
       </div>
 
 
