@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import style from "../styles/modals/create.module.css";
+
+
 import Spinner from "../components/Spinner";
+import Toastify from "./Toastify";
 
 
 function CreateSpace({ onClose }) {
@@ -19,19 +22,24 @@ function CreateSpace({ onClose }) {
   ];
 
   const [loading, setLoading] = useState(false)
-  const [errorCreate, setErrorCreate] = useState("")
+  const [errorCreate, setErrorCreate] = useState("Something went wrong")
   const [selectedTimeZone, setSelectedTimeZone] = useState(null);
   const [newSpaceDetails, setNewSpaceDetails] = useState({
     name: "",
-    timeZone: selectedTimeZone
+    timeZone: commonTimezones[0].value
   })
 
   const handleCreateSpace = ()=>{
-    if(newSpaceDetails.name == "") return
+    if(newSpaceDetails.name == ""){
+      setErrorCreate("Provide the name of the space")
+      return
+    }
+
     setLoading(true)
     setTimeout(() => {
         setLoading(false) 
-    }, 500);
+        setErrorCreate("")
+    }, 10000);
   }
 
   return (
@@ -42,6 +50,10 @@ function CreateSpace({ onClose }) {
           <h2>Create</h2>
           <div className={style.close} onClick={onClose} > Close </div>
         </div>
+
+        { errorCreate !== "" && (
+            <Toastify type="error" message={errorCreate} onClose={()=>setErrorCreate("")} /> 
+            )}
 
         <div className={style.inputContainer}>
           <h3>Space Name</h3>
@@ -62,7 +74,7 @@ function CreateSpace({ onClose }) {
         </div>
 
         <div className={style.createSpace} onClick={handleCreateSpace} > 
-            { loading ? "Create" : <Spinner/> }
+            { !loading ? "Create" : <Spinner/> }
         </div>   
       </div>
     </div>
