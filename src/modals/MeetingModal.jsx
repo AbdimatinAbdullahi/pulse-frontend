@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "../styles/modals/meeting.module.css";
+import { times, tomorrowsDate } from '../utils/times'
+
 import {
   CalendarClock,
   Clock,
   Edit2,
   Presentation,
-  Repeat,
 } from "lucide-react";
 
 function MeetingModal({ onClose }) {
+
+  const [meetingName, setMeetingName] = useState("")
+  const startTime = tomorrowsDate("Africa/Nairobi")
+  console.log("Tomorrows date: ", startTime)
+
+  const [statTime, setstatTime] = useState(startTime)
+
+
   return (
     <div className={style.meetingOverlay}>
       <div className={style.meetingModalContainer}>
@@ -48,13 +57,16 @@ function MeetingModal({ onClose }) {
           <div className={style.datesContainer}>
 
             <div className={style.startTime}>
-              <input type="date" />
-              <input type="date.time" className={style.hour}/>
+              <input type="date" value={startTime} min={startTime} />
+              <select className={style.hour} >
+                  { times.map((time)=>(
+                    <option value={time.value}> {time.label} </option>
+                  )) }
+              </select>
             </div>
 
             <div className={style.endTime}>
-              <input type="date" />
-              <input type="date.time" className={style.hour} />
+              <input type="number" placeholder="Enter the duration in hours" min={0.5} max={24} />
             </div>
 
           </div>

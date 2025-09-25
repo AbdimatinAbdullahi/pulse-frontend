@@ -147,7 +147,7 @@
     justify-content: space-between;
 }
 
-.startTime input[type="date"], .endTime input[type="date"]{
+.startTime input[type="date"], .endTime input[type="number"]{
     width: 400px;
     height: 60px;
     border: 1px solid var(--hover-color);
@@ -158,9 +158,8 @@
     border-radius: 4px;
     outline: none;
 }
-
 .hour{
-    width: 100px;
+    width: 110px;
     height: 60px;
     border: 1px solid var(--hover-color);
     border-radius: 4px;
