@@ -16,7 +16,7 @@ const reducer = (state, action) => {
         case "LOADSPACE":
             return { ...state, spaces:action.payload }
         case "NEW_SPACE":
-            return {...state, spaces: [ ...state.spaces, ...payload.space ]}
+            return {...state, spaces: [ ...state.spaces ]}
         case "SELECT_ACTIVE_SPACE":
             return {...state, activespace: action.payload}
     }
@@ -56,15 +56,16 @@ export const SpaceContextProvider = ({ children })=>{
     }, [ user_id ])
 
 
-    const HandleSpaceCreate = async( name, timezone, userid ) => {
+    const HandleSpaceCreate = async( name, description ) => {
         try {
             const spaceCreateRes = await axios.post(`${room_url_services}/create-space`,{
                name: name,
-               creator: userid,
-               timezone: timezone 
+               creator: user_id,
+               description: description 
             })
 
             if(spaceCreateRes.status == 200){
+                console.log("Sapce Created: ", spaceCreateRes)
                 dispatch({type: "NEW_SPACE", payload: spaceCreateRes.data})
             }
 
@@ -72,7 +73,7 @@ export const SpaceContextProvider = ({ children })=>{
 
         } catch (error) {
             if(error?.response?.status == 409){
-                return { success: false, message: "You already have space" }
+                return { success: false, message: "You already have existing space" }
             }  else {
                 return { success: false, message: "Something went wrong" }
             } 

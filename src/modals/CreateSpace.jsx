@@ -4,6 +4,7 @@ import style from "../styles/modals/create.module.css";
 
 import Spinner from "../components/Spinner";
 import Toastify from "./Toastify";
+import { useSpace } from '../context/SpaceContext'
 
 
 function CreateSpace({ onClose }) {
@@ -15,8 +16,12 @@ function CreateSpace({ onClose }) {
     description: ""
   })
 
-  const handleCreateSpace = ()=>{
-    if(newSpaceDetails.name == ""){
+
+  const { HandleSpaceCreate } = useSpace()
+
+  const handleCreateClick = async () => {
+    setErrorCreate("")
+    if(newSpaceDetails.name.trim() === ""){
       setErrorCreate("Provide the name of the space")
       return
     }
@@ -36,11 +41,13 @@ function CreateSpace({ onClose }) {
       return
     }
 
-    setLoading(true)
-    setTimeout(() => {
-        setLoading(false) 
-        setErrorCreate("")
-    }, 10000);
+    const result = await HandleSpaceCreate(newSpaceDetails.name, newSpaceDetails.description)
+    if(result.success){
+      console.log("Space created")
+      return
+    } else {
+      setErrorCreate(result.message)
+    }
 
   }
 
@@ -67,7 +74,7 @@ function CreateSpace({ onClose }) {
             <textarea value={newSpaceDetails.description} onChange={(e)=>setNewSpaceDetails({ ...newSpaceDetails, description: e.target.value })} placeholder="Enter the description here" />
         </div>
 
-        <div className={style.createSpace} onClick={handleCreateSpace} > 
+        <div className={style.createSpace} onClick={handleCreateClick} > 
             { !loading ? "Create" : <Spinner/> }
         </div>   
       </div>
