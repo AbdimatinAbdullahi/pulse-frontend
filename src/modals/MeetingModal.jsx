@@ -27,6 +27,9 @@ function MeetingModal({ onClose }) {
   const [ duration, setDuration] = useState("")
 
 
+  const {} = uses
+
+
   const handleCreateMeeting = async ()=>{
       setError("");
       if (!meetingName.trim()) {
@@ -56,6 +59,7 @@ function MeetingModal({ onClose }) {
       const durationHours = parseFloat(dur)
 
       const meetingStartTime = new Date(`${startDate}T${selectedHour}`)
+
       const localDate = new Date(meetingStartTime.toISOString())
       const endUTC = new Date(localDate.getTime() + durationHours * 60 * 60 * 1000)
 
@@ -91,7 +95,6 @@ function MeetingModal({ onClose }) {
           </div>
 
           <div className={style.section2}>
-            <div className={style.save}> Save </div>
             <div onClick={onClose} className={style.close}>
               {" "}
               Close{" "}
