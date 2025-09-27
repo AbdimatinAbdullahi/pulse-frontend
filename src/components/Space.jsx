@@ -7,16 +7,27 @@ import Chat from './Chat'
 import Meet from './Meet'
 import MeetingModal from '../modals/MeetingModal'
 import SpaceModal from '../modals/SpaceModal'
+import { useSpace } from '../context/SpaceContext'
 
 function Space() {
 
   const [activePage, setActivePage] = useState("chat")
-    const { action, closeModal, openModal } = useWorkspaceModal()
+  const { action, closeModal, openModal } = useWorkspaceModal()
 
   const handleTab =(activepage)=>{
     if(activepage === "" && activepage === activePage) return
     setActivePage(activepage)
   }
+
+
+  const { state} = useSpace()
+
+  if(state.spaces.length == 0) return (
+    <div className={style.noSpace}>
+        <div> No space is available </div>
+        <div> Join or create </div>
+    </div>
+     )
 
   return (
     <div className={style.spaceContainer}>

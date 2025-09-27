@@ -42,7 +42,9 @@ export const SpaceContextProvider = ({ children })=>{
             try {
                 const initialFetchRes = await axios.get(`${room_url_services}/initial-fetch?uuid=${userId}`)
                 if(initialFetchRes.status == 200){
-                    dispatch({type: "LOADSPACE", payload: initialFetchRes.data.spaces})
+                    console.log("First space: ", initialFetchRes.data[0])
+                    dispatch({type: "LOADSPACE", payload: initialFetchRes.data})
+                    dispatch({ type: "SELECT_ACTIVE_SPACE", payload: initialFetchRes.data[0] })
                 }
             } catch (error) {
                 console.error("Error loading the spaces", error)

@@ -20,6 +20,20 @@
     position: relative;
 }
 
+.noSpace{
+    flex-grow: 1;
+    height: 100%;
+    border: 1px solid var(--hover-color);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-secular);
+    font-size: 30px;
+}
+
 .navbar{
     width: 60px;
     height: 100%;

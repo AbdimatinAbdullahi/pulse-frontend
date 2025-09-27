@@ -27,9 +27,6 @@ function MeetingModal({ onClose }) {
   const [ duration, setDuration] = useState("")
 
 
-  const {} = uses
-
-
   const handleCreateMeeting = async ()=>{
       setError("");
       if (!meetingName.trim()) {
