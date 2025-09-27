@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "../styles/modals/spacemodal.module.css";
 
 import { Activity, CircleOff } from "lucide-react";
@@ -6,12 +6,23 @@ import Timezone from "../components/modals/Timezone";
 import Invite from "../components/modals/Invite";
 import EachMember from "../components/modals/EachMember";
 import Inviter from "../components/modals/Inviter";
+import { useSpace } from "../context/SpaceContext";
 
 
 function SpaceModal({ onClose }) {
 
   const [members, setMembers] = useState([1, 2, 3, 5, 6, 7, 8]);
   const [invitations, setInvitations] = useState([1, 2, 3, 4, 5, 6, 7]);
+
+  const { state } = useSpace()
+  const { activespace } = state;
+
+  const { Members, Invitations } = activespace
+
+  useEffect(()=>{
+    console.log("Members: ", Members)
+    console.log("Invitations: ", Invitations)
+  }, [ activespace ])
 
   return (
     <div className={style.overLay}>
@@ -34,17 +45,13 @@ function SpaceModal({ onClose }) {
           </div>
         </div>
 
-        {/* Time Zone Header */}
-        <Timezone />
-
-
 
         {/* Space Members */}
         <div className={style.spaceMembers}>
           <h3> Members </h3>
-         {members.length > 0 ? (
-            members.map((member, index) => (
-            <EachMember index={index} />
+         {Members.length > 0 ? (
+            Members.map((member, index) => (
+            <EachMember member={member} />
             ))
           ) : (
             <div className={style.noMember}>
@@ -58,12 +65,12 @@ function SpaceModal({ onClose }) {
         {/* Space Invitations */}
         <div className={style.invitations}>
           <h3> Invitations </h3>
-          {invitations.length > 0 ? (
+          {Invitations.length > 0 ? (
             invitations.map((invite) => (
-            <Invite/>
+            <Invite />
             ))
           ) : (
-            <div className={style.noMemsber}>
+            <div className={style.noMember}>
               <CircleOff size={50} style={{ color: "#9900cc" }} />
               No Pending Invitations
             </div>

@@ -1,17 +1,21 @@
 import React from "react";
 import { Trash } from "lucide-react";
 import style from '../../styles/modals/invite.module.css'
+import { timeFomartLocalTime } from "../../utils/times";
 
 
-function Invite() {
+function Invite({ invite }) {
+
+  const formatTime = timeFomartLocalTime(invite.invited_at)
+
   return (
     <div className={style.memberContainer}>
       <div className={style.memberSecOne}>
-        <h3> Ramla Hussien </h3>
-        <span> Joined at 30 sep 2025 </span>
+        <h3> { invite.email } </h3>
+        <span> Joined at {formatTime}</span>
       </div>
 
-      <div className={style.memberSecTwo}>Admin</div>
+      <div className={style.memberSecTwo}>{ invite.role }</div>
 
       <div className={style.iconRemove}>
         <Trash />

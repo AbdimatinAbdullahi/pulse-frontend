@@ -64,3 +64,16 @@ export function tomorrowsDate(timeZone){
 
     return tomorrowFormatted.format(tomorrow)
 }
+
+export function timeFomartLocalTime(time){
+
+  const cleanedTimeStamp = time.replace(/ \+\d+ UTC$/, 'Z')
+  const date = new Date(cleanedTimeStamp)
+  const localTime = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    day:"2-digit",
+    month:"long"
+  })
+
+  return localTime
+}
