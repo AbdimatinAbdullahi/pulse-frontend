@@ -6,6 +6,7 @@ const room_url = import.meta.env.VITE_WSS
 // This is cutom react hooks that manges websocket connection using user and spaceID, it listens for real time messages from the server and calls the appropriate
 // callback functions that will update state in the parensts components. It aslo provides actions to parents components to call server
 export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJoin){
+    
     const socketRef = useRef(null)
 
     useEffect(()=>{
@@ -47,8 +48,9 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJ
             console.log("Clg the incoming data: ", data)
             console.log("Clg the incoming event type: ", event.type)
 
-            switch (data.type){
+            switch (data.Type){
                 case "new_meeting":
+                    console.log("New meeting arrives: ", data.Payload)
                     onNewMeeting(data.payload)
                     break
 
@@ -85,7 +87,8 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJ
     }
 
     const sendNewMeeting = (data)=>{
-        const { meetingName, meetingStart, meetingEndUT, whoCanPresent } = data;
+        const { meetingName, meetingStart, meetingEndUT, whoCanPresent, whoCanJoin, passCode } = data;
+        console.log("Data coming into useWebsocker: ", data)
         if(socketRef.current && socketRef.current.readyState === WebSocket.OPEN){
             socketRef.current.send(JSON.stringify({
                 type: "new_meeting",
@@ -95,7 +98,9 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJ
                     endTime : meetingEndUT,
                     present : whoCanPresent,
                     creator: userID,
-                    spaceID: spaceID
+                    spaceID: spaceID,
+                    passCode: passCode,
+                    private:  whoCanJoin === "members" ? true : false
                 }
             }))
         } else {

@@ -24,7 +24,7 @@
 
 .meetingModalContainer{
     width: 60%;
-    height: 500px;
+    height: 700px;
     background-color: white;
     border-radius: 12px;
     display: flex;
@@ -112,7 +112,7 @@
     }
 }
 
-.inputContainer, .dates, .repeatContainer, .presentContainer{
+.inputContainer, .dates, .repeatContainer, .presentContainer, .passCodeContainer{
     display: grid;
     grid-template-columns: 0.1fr 2fr;
     align-items: start;
@@ -121,7 +121,7 @@
     height: fit-content;
 }
 
-.inputContainer input, .presentContainer select{
+.inputContainer input, .presentContainer select, .passCodeContainer input{
     width: 90%;
     height: 60px;
     border: 1px solid var(--hover-color);
@@ -166,6 +166,25 @@
     font-family: var(--font-secular);
     font-size: 18px;
     outline: none;
+}
+
+.warning{
+    width: 90%;
+    height: 60px;
+    border: 1px solid gray;
+    margin-left: 4em;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+.warning span{
+    font-family: var(--font-ubuntu);
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    width: 100%;
+    height: 100%;
 }
 
 .createMeeting{

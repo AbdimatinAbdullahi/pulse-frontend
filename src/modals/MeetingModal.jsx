@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import style from "../styles/modals/meeting.module.css";
 import { times, tomorrowsDate } from '../utils/times'
 import Spinner from '../components/Spinner'
@@ -8,29 +8,57 @@ import {
   Clock,
   Edit2,
   Presentation,
+  Users,
+  Lock
 } from "lucide-react";
 import { useSpace } from "../context/SpaceContext";
+import { PasscodeGenerator } from "../utils/PasscodeGenerator";
 
 function MeetingModal({ onClose }) {
+
+  const passcodeRef = useRef(null)
+
+  useEffect(()=>{
+    const passWord = PasscodeGenerator()
+    setMeetingDetails((prev)=>({ ...prev, passCode: passWord }))
+  }, [])
+  
 
 
   // getting tomorows date from utils function
 
   const startTime = tomorrowsDate("Africa/Nairobi")
-  // getting tomorows date for space timezone
-  const [ meetingName, setMeetingName ] = useState("")
-  const [ startDate, setStartDate ] = useState(startTime)
-  const [ selectedHour, setSelectedHour ] = useState(times[0].value)
-  const [ whoCanPresent, setWhoCanPresent ] = useState("me")
   
-  const [ loading, setLoading ] = useState(false)
+  // getting tomorows date for space timezone
+
+
   const [ error, setError ] = useState("")
-  const [ duration, setDuration] = useState("")
+  const [ loading, setLoading ] = useState(false)
 
   const { handleCreateNewMeeting } = useSpace()
 
+  const [meetingDetails, setMeetingDetails] = useState({
+    meetingName: "",
+    startDate: startTime,
+    startHour: times[0].value,
+    whoCanPresent: "me",
+    whoCanJoin: "members",
+    duration: "",
+    passCode: ""
+  })
+
+
+
+  const handleOnChange = (event)=>{
+    const { name, value} = event.target
+    setMeetingDetails((prev)=> ({
+      ...prev,
+      [name] : value
+    }))
+  }
 
   const handleCreateMeeting = async ()=>{
+    const { meetingName, whoCanPresent, whoCanJoin, duration, startDate, startHour, passCode} = meetingDetails
       setError("");
       if (!meetingName.trim()) {
         setError("Provide meeting name");
@@ -50,28 +78,23 @@ function MeetingModal({ onClose }) {
         setError("Duration must be a positive number");
         return;
       }
-      if (dur >= 24) {
-        setError("You can't meet for more than 24 hours");
+      if (dur >= 5) {
+        setError("You can't meet for more than 5 hours");
         return;
       }
 
       setLoading(true)
       const durationHours = parseFloat(dur)
 
-      const meetingStartTime = new Date(`${startDate}T${selectedHour}`)
-
-      const localDate = new Date(meetingStartTime.toISOString())
+      // local time meetng is suppose to start
+      const meetingStartTime = new Date(`${startDate}T${startHour}`)
+      const localDate = new Date(meetingStartTime.toISOString())      
       const endUTC = new Date(localDate.getTime() + durationHours * 60 * 60 * 1000)
-
-    
       const meetingEndUT = endUTC.toISOString()
-      const meetingStart = localDate.toISOString()
-
-      await handleCreateNewMeeting({ meetingName, meetingStart, meetingEndUT, whoCanPresent })
-
-      setTimeout(() => {
-        setLoading(false)
-      }, 500);
+      const meetingStart = meetingStartTime.toISOString()
+      await handleCreateNewMeeting({ meetingName, meetingStart, meetingEndUT, whoCanPresent, whoCanJoin, passCode })
+      setLoading(false)
+      
 
   }
 
@@ -106,7 +129,7 @@ function MeetingModal({ onClose }) {
           <div className={style.edit}>
             <Edit2 className={style.iconTwo} size={30} />
           </div>
-          <input type="text" placeholder="Enter the meeting name" value={meetingName} onChange={(e)=>setMeetingName(e.target.value)} />
+          <input type="text" placeholder="Enter the meeting name" value={meetingDetails.meetingName} name="meetingName"  onChange={(e)=>handleOnChange(e)} />
         </div>
 
 
@@ -119,8 +142,8 @@ function MeetingModal({ onClose }) {
           <div className={style.datesContainer}>
 
             <div className={style.startTime}  >
-              <input type="date" value={startDate}  onChange={(e)=> setStartDate(e.target.value)} min={startTime} />
-              <select className={style.hour} value={selectedHour} onChange={(e)=>setSelectedHour(e.target.value)}  >
+              <input type="date" value={meetingDetails.startDate} name="startDate" onChange={(e)=>handleOnChange(e)} />
+              <select className={style.hour} value={meetingDetails.startHour} name="startHour" onChange={(e)=>handleOnChange(e)}  >
                   { times.map((time)=>(
                     <option value={time.value}> {time.label} </option>
                   )) }
@@ -128,21 +151,40 @@ function MeetingModal({ onClose }) {
             </div>
 
             <div className={style.endTime}>
-              <input type="number" placeholder="Enter the duration in hours" min={0.5} max={24} value={duration} onChange={(e)=>setDuration(e.target.value)} />
+              <input type="number" placeholder="Enter the duration in hours" name="duration" min={0.5} max={24} value={meetingDetails.duration} onChange={(e)=>handleOnChange(e)} />
             </div>
 
           </div>
         </div>
 
         <div className={style.presentContainer}>
-          <Presentation />
-          <select value={whoCanPresent} onChange={(e)=>setWhoCanPresent(e.target.value)} >
+          <Presentation size={30} />
+          <select value={meetingDetails.whoCanPresent} name="whoCanPresent" onChange={(e)=>handleOnChange(e)}>
             <option value="" disabled selected hidden> Who can present? </option>
             <option value="everyone"> Everyone </option>
             <option value="me"> Me only </option>
           </select>
         </div>
 
+        <div className={style.presentContainer}>
+          <Users size={30} />
+          <select value={meetingDetails.whoCanJoin} name="whoCanJoin" onChange={(e)=>handleOnChange(e)} >
+              <option value="" selected hidden disabled> Who can join? </option>
+              <option value="everyone"> Everyone </option>
+              <option value="members"> Members </option>
+          </select>
+        </div>
+
+        
+        <div className={style.passCodeContainer}>
+            <Lock size={30}/>
+            <input type="text" value={meetingDetails.passCode} ref={passcodeRef} />
+        </div>
+
+        <div className={style.warning}>
+          <span> Copy and store the meeting passcode some where safe, in case the meeting is public, others will use that to join the meeting </span>
+        </div>
+    
         <div className={style.createMeeting} onClick={handleCreateMeeting} > { loading ? <Spinner/> : " Create Meeting"  } </div>
 
       </div>
