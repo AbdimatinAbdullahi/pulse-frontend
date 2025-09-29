@@ -9,6 +9,7 @@ import {
   Edit2,
   Presentation,
 } from "lucide-react";
+import { useSpace } from "../context/SpaceContext";
 
 function MeetingModal({ onClose }) {
 
@@ -25,6 +26,8 @@ function MeetingModal({ onClose }) {
   const [ loading, setLoading ] = useState(false)
   const [ error, setError ] = useState("")
   const [ duration, setDuration] = useState("")
+
+  const { handleCreateNewMeeting } = useSpace()
 
 
   const handleCreateMeeting = async ()=>{
@@ -60,15 +63,11 @@ function MeetingModal({ onClose }) {
       const localDate = new Date(meetingStartTime.toISOString())
       const endUTC = new Date(localDate.getTime() + durationHours * 60 * 60 * 1000)
 
-      console.log("Meeting start Time", meetingStartTime)
-      console.log("Local date start: ", localDate)
-      console.log("Local date end: ", endUTC)
-
+    
       const meetingEndUT = endUTC.toISOString()
       const meetingStart = localDate.toISOString()
 
-      console.log("Equivalent time of the meeting start time in UTC: ", meetingStart)
-      console.log("Equivalent time of the meeting end time in UTC: ", meetingEndUT)
+      await handleCreateNewMeeting({ meetingName, meetingStart, meetingEndUT, whoCanPresent })
 
       setTimeout(() => {
         setLoading(false)

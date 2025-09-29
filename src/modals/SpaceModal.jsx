@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import style from "../styles/modals/spacemodal.module.css";
 
 import { Activity, CircleOff } from "lucide-react";
@@ -11,18 +11,13 @@ import { useSpace } from "../context/SpaceContext";
 
 function SpaceModal({ onClose }) {
 
-  const [members, setMembers] = useState([1, 2, 3, 5, 6, 7, 8]);
-  const [invitations, setInvitations] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [ members, setMembers ] = useState([1, 2, 3, 5, 6, 7, 8]);
+  const [ invitations, setInvitations ] = useState([1, 2, 3, 4, 5, 6, 7]);
 
   const { state } = useSpace()
   const { activespace } = state;
 
   const { Members, Invitations } = activespace
-
-  useEffect(()=>{
-    console.log("Members: ", Members)
-    console.log("Invitations: ", Invitations)
-  }, [ activespace ])
 
   return (
     <div className={style.overLay}>

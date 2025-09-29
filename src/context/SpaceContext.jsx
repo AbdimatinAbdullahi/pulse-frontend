@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, {useState, useEffect, useReducer, useContext, createContext} from "react";
 import { useAuth } from "./AuthContext";
+import React, {useState, useEffect, useReducer, useContext, createContext} from "react";
 
+import { useWebsocket } from '../hooks/useWebsockets'
 
 const SpaceContext = createContext()
 
@@ -26,18 +27,21 @@ const room_url_services = import.meta.env.VITE_ROOM_SERVICE_URL
 
 
 export const SpaceContextProvider = ({ children })=>{
-    const [state, dispatch] = useReducer(reducer, initialState)
+
     const { user } = useAuth()
     const user_id = user.id
-    console.log("User_id : ", user_id)
+    const [ state, dispatch ] = useReducer(reducer, initialState)
+
+    const { sendNewMeeting, sendNewInvitation, } = useWebsocket(user_id, state.activespace?.Space?.id)
+    
 
     useEffect(()=>{
         const InitialFetch = async (userId)=>{
 
             if(userId == ""){
-                console.error("User id is not passed")
                 return
             }
+
 
             try {
                 const initialFetchRes = await axios.get(`${room_url_services}/initial-fetch?uuid=${userId}`)
@@ -49,6 +53,8 @@ export const SpaceContextProvider = ({ children })=>{
             } catch (error) {
                 console.error("Error loading the spaces", error)
             }
+
+
         }
 
         InitialFetch(user_id)
@@ -80,10 +86,21 @@ export const SpaceContextProvider = ({ children })=>{
         }
     }
 
+    
+    const handleCreateNewMeeting = (data) => {
+       console.log("Data for meeting arriving: ", data)
+       sendNewMeeting(data)
+    }
+
+    const handleSendInvitation = (email, role)=>{
+        console.log("Data arriving: ", email, role)
+        sendNewInvitation(email, role)
+    }
+
 
 
     return (
-        <SpaceContext.Provider value={{ state, dispatch, HandleSpaceCreate }} >
+        <SpaceContext.Provider value={{ state, dispatch, HandleSpaceCreate, handleCreateNewMeeting, handleSendInvitation}} >
             { children }
         </SpaceContext.Provider>
 )

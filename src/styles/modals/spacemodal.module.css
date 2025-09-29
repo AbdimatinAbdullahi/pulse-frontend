@@ -126,6 +126,10 @@
     overflow-y: auto;
 }
 
+.spaceMembers{
+    margin-top: 4em;
+}
+
 .spaceMembers h3{
     font-family: var(--font-ubuntu);
     font-size: 20px;

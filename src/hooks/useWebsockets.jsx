@@ -5,22 +5,30 @@ const room_url = import.meta.env.VITE_WSS
 
 // This is cutom react hooks that manges websocket connection using user and spaceID, it listens for real time messages from the server and calls the appropriate
 // callback functions that will update state in the parensts components. It aslo provides actions to parents components to call server
-export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onNewMember, onCancelInvite, onDeleteSpace, onLeaveSpace, onTimezoneChange, onRemoveUser, onJoin){
+export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJoin){
     const socketRef = useRef(null)
 
     useEffect(()=>{
     
         if(!userID || !spaceID){
-            console.warn("No space and user id provided")
             return
         }
 
-        const socket = new WebSocket(`${room_url}/userid=${userID}&space=${spaceID}`)
+        const socket = new WebSocket(`${room_url}/room?userid=${userID}`)
 
         socketRef.current = socket
 
         socket.onopen = ()=>{
+             const payload = {
+                type: "join",
+                payload: {
+                userID,
+                spaceID,
+                },
+            };
+
             console.log("Websocket connection is live")
+            socket.send(JSON.stringify(payload))
         }
 
         socket.onerror = (error)=>{
@@ -28,9 +36,10 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onN
         }
 
 
-        socket.onclose = ()=>{
-            console.log("Connection is closed")
-        }  
+        socket.onclose = (event) => {
+        console.log("Client saw close:", event.code, event.reason);
+        };
+        
 
 
         socket.onmessage = (event) =>{
@@ -42,36 +51,9 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onN
                 case "new_meeting":
                     onNewMeeting(data.payload)
                     break
-                case "new_member":
-                    onNewMember(data.payload)
-                    break
 
                 case "new_invite":
                     onNewInvitation(data.payload)
-                    break
-
-                case "cancel_invite":
-                    onCancelInvite(data.payload)
-                    break
-
-                case "delete_space":
-                    onDeleteSpace(data.payload)
-                    break
-                    
-                case "leave_space":
-                    onLeaveSpace(data.payload)
-                    break
-
-                case "time_zone_change":
-                    onTimezoneChange(data.payload)
-                    break
-
-                case "remove_user":
-                    onRemoveUser(data.payload)
-                    break
-
-                case "join_space":
-                    onJoin(data.payload)
                     break
 
                 default:
@@ -86,37 +68,42 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onN
             }
         }
     
-    }, [userID, spaceID])
+    }, [userID, spaceID ])
 
 
     const sendNewInvitation = (email, role)=>{
-
+        console.log("Data arriving: ", email, role)
+        if(socketRef.current && socketRef.current.readyState === WebSocket.OPEN){
+            socketRef.current.send( JSON.stringify({
+                type: "new_invitation",
+                payload: {
+                    email : email,
+                    role : role
+                }
+            }))
+        }
     }
 
-    const sendNewMeeting = ()=>{
-
+    const sendNewMeeting = (data)=>{
+        const { meetingName, meetingStart, meetingEndUT, whoCanPresent } = data;
+        if(socketRef.current && socketRef.current.readyState === WebSocket.OPEN){
+            socketRef.current.send(JSON.stringify({
+                type: "new_meeting",
+                payload: {
+                    name : meetingName,
+                    startTime: meetingStart,
+                    endTime : meetingEndUT,
+                    present : whoCanPresent,
+                    creator: userID,
+                    spaceID: spaceID
+                }
+            }))
+        } else {
+            console.warn("Unable to send meeting")
+        }
     }
 
-    const sendLeaveSpace = ()=>{
-        
-    }
 
-    const sendTimezoneChange = ()=>{
-
-    }
-
-    const sendCancelInvite = ()=>{
-
-    }
-
-    const sendDeleteSpace = ()=>{
-
-    }
-
-    const sendRemoveUser = ()=>{
-
-    }
-
-    return { sendNewMeeting, sendNewInvitation, sendLeaveSpace, sendTimezoneChange, sendCancelInvite, sendDeleteSpace, sendRemoveUser}
+    return { sendNewMeeting, sendNewInvitation }
 
 }
