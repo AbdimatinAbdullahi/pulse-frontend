@@ -20,8 +20,10 @@ function Inviter() {
       return
     }
 
-    await handleSendInvitation(email, role)
-
+    const result = await handleSendInvitation(email, role)
+    if(!result.success){
+      alert("Invitation failed")
+    }
   }
 
 

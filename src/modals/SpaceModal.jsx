@@ -10,10 +10,6 @@ import { useSpace } from "../context/SpaceContext";
 
 
 function SpaceModal({ onClose }) {
-
-  const [ members, setMembers ] = useState([1, 2, 3, 5, 6, 7, 8]);
-  const [ invitations, setInvitations ] = useState([1, 2, 3, 4, 5, 6, 7]);
-
   const { state } = useSpace()
   const { activespace } = state;
 
@@ -61,8 +57,8 @@ function SpaceModal({ onClose }) {
         <div className={style.invitations}>
           <h3> Invitations </h3>
           {Invitations.length > 0 ? (
-            invitations.map((invite) => (
-            <Invite />
+            Invitations.map((invite) => (
+            <Invite invite={invite}/>
             ))
           ) : (
             <div className={style.noMember}>

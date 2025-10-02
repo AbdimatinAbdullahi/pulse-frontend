@@ -44,17 +44,16 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJ
 
 
         socket.onmessage = (event) =>{
+            // parsing data into form of javascript object
             const data = JSON.parse(event.data)
-            console.log("Clg the incoming data: ", data)
-            console.log("Clg the incoming event type: ", event.type)
-
-            switch (data.Type){
+            switch (data.type){
+                
                 case "new_meeting":
-                    console.log("New meeting arrives: ", data.Payload)
+                    console.log("New meeting arrives: ", data.payload)
                     onNewMeeting(data.payload)
                     break
 
-                case "new_invite":
+                case "new_invitation":
                     onNewInvitation(data.payload)
                     break
 
@@ -73,38 +72,23 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJ
     }, [userID, spaceID ])
 
 
-    const sendNewInvitation = (email, role)=>{
-        console.log("Data arriving: ", email, role)
+    const sendNewInvitation = (data)=>{
+        console.log("Data csending to new invitation: ", data)
         if(socketRef.current && socketRef.current.readyState === WebSocket.OPEN){
             socketRef.current.send( JSON.stringify({
                 type: "new_invitation",
-                payload: {
-                    email : email,
-                    role : role
-                }
+                payload: data
             }))
         }
     }
 
     const sendNewMeeting = (data)=>{
-        const { meetingName, meetingStart, meetingEndUT, whoCanPresent, whoCanJoin, passCode } = data;
-        console.log("Data coming into useWebsocker: ", data)
-        if(socketRef.current && socketRef.current.readyState === WebSocket.OPEN){
+        console.log("Data coming into useWebsocket: ", data)
+        if(socketRef.current && socketRef.current.readyState == WebSocket.OPEN){
             socketRef.current.send(JSON.stringify({
                 type: "new_meeting",
-                payload: {
-                    name : meetingName,
-                    startTime: meetingStart,
-                    endTime : meetingEndUT,
-                    present : whoCanPresent,
-                    creator: userID,
-                    spaceID: spaceID,
-                    passCode: passCode,
-                    private:  whoCanJoin === "members" ? true : false
-                }
+                payload:data,
             }))
-        } else {
-            console.warn("Unable to send meeting")
         }
     }
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAuth } from "./AuthContext";
-import React, {useState, useEffect, useReducer, useContext, createContext} from "react";
+import React, {useState, useEffect, useReducer, useContext, createContext, use} from "react";
 
 import { useWebsocket } from '../hooks/useWebsockets'
 
@@ -87,16 +87,111 @@ export const SpaceContextProvider = ({ children })=>{
     }
 
     
-    const handleCreateNewMeeting = (data) => {
-       console.log("Data for meeting arriving: ", data)
-       sendNewMeeting(data)
+    const handleCreateNewMeeting = async (data) => {
+        const { meetingName, meetingStart, meetingEndUT, whoCanPresent, whoCanJoin, passCode } = data
+        try {
+            const createMeetingRes = await axios.post(`${room_url_services}/create-meeting`, {
+                name: meetingName,
+                startTime: meetingStart,
+                endTime: meetingEndUT,
+                present: whoCanPresent,
+                creator: user_id,
+                spaceID: state.activespace?.Space?.id,
+                passCode:passCode,
+                private: whoCanJoin == "everyone" ? false : true
+            })
+
+            if (createMeetingRes.status == 200){                
+                // send into websocket connection
+                sendNewMeeting(createMeetingRes.data)
+                return { success: true }
+            }
+
+       } catch (error) {
+        console.log("Error creating meeting: ", error)
+        return { success: false }
+       }
     }
 
-    const handleSendInvitation = (email, role)=>{
-        console.log("Data arriving: ", email, role)
-        sendNewInvitation(email, role)
+    const handleSendInvitation = async (email, role)=>{
+        console.log("SEnding email and role: ", email, role)
+        try {
+            const createInvitationRes = await axios.post(`${room_url_services}/create-invitation`,{
+                email: email,
+                role: role,
+                space: state.activespace?.Space?.id,
+                inviter: user_id
+            })
+            console.log(createInvitationRes)
+
+            if(createInvitationRes.status == 200){
+                sendNewInvitation(createInvitationRes.data)
+                return { success : true }
+            }
+
+        } catch (error) {
+            console.log("Error creating invitation: ", error)
+            return { success: false }
+        }
     }
 
+    const hanleCancelInvitation = async (id, email )=>{
+        try {
+            const cancelInvitationRes = await axios.post(`${room_url_services}/cancel-invitation`, {
+                invitationID: id,
+                cancelor: user_id,
+                space: state.activespace?.Space?.id
+            })
+
+            if(cancelInvitationRes.status == 200){
+                return { success : true }
+            }
+
+        } catch (error) {
+            console.log("Unable to cancel invite: ", error)
+            return { success: false }
+        }
+    }
+
+    const handleDeleteWorkspace = async ()=>{
+        try {
+            const deleteRes = await axios.delete(`${room_url_services}.delete-space?uuid=${user_id}&space=${state.activespace?.Space?.id}`)
+            if(deleteRes.status == 200){
+                return { success: true }
+            }
+        } catch (error) {
+            console.error("Failed to delete workspace: ", error)
+            return { success: false }
+        }
+    }
+
+    const handleLeaveWorkspace = async ()=>{
+        try {
+            const leaveRes = await axios.delete(`${room_url_services}/leave-space?uuid=${user_id}&space=${state.activespace?.Space?.id}`)
+            if(leaveRes.status == 200){
+                return { success: true }
+            }
+        } catch (error) {
+            console.error("Failed to leave workspace: ", error)
+            return { success: false }
+        }
+    }
+
+    const handleAcceptInvitation = async (code, email)=>{
+        try {
+            const acceptInvitationRes = await axios.post(`${room_url_services}/accept-invitation`,{
+                code: code,
+                email: email,
+            })
+
+            if(acceptInvitationRes.status == 200){
+                return { success : true }
+            }
+
+        } catch (error) {
+            return { success: false}
+        }
+    }
 
 
     return (

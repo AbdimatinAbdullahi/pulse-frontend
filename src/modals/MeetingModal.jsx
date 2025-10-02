@@ -92,8 +92,14 @@ function MeetingModal({ onClose }) {
       const endUTC = new Date(localDate.getTime() + durationHours * 60 * 60 * 1000)
       const meetingEndUT = endUTC.toISOString()
       const meetingStart = meetingStartTime.toISOString()
-      await handleCreateNewMeeting({ meetingName, meetingStart, meetingEndUT, whoCanPresent, whoCanJoin, passCode })
+      
+      const result = await handleCreateNewMeeting({ meetingName, meetingStart, meetingEndUT, whoCanPresent, whoCanJoin, passCode })
       setLoading(false)
+      if(result.success){
+        onClose()
+      } else {
+        setError("Unable to create meeting")
+      }
       
 
   }
