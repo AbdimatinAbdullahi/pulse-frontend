@@ -1,15 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from '../styles/components/meet.module.css'
 import { CalendarCheck2, Link2, MousePointer2 } from 'lucide-react'
 import Meeting from './Meeting'
 import  { InstantMeetingContainer } from './ChatBar'
 import { useWorkspaceModal } from '../context/WorkspaceModalContext'
+import { useSpace } from '../context/SpaceContext'
 
 
 function Meet() {
 
   const { openModal } = useWorkspaceModal()
   const [ InstantMeetingModalOpen, setInstantMeetingModalOpen ] = useState(false)
+  const { state } = useSpace()
+  const { activespace  } = state
+  const { TodaysMeetings, TomorrowsMeeting } = activespace
+
+  useEffect(()=>{
+    console.log("Todays meeting: ", TodaysMeetings)
+    console.log("Tomorrows meeting: ", TomorrowsMeeting)
+  }, [])
 
   return (
     <div className={style.meetContainer}>
@@ -45,9 +54,11 @@ function Meet() {
           <h3> Todays Meetings </h3>
 
           <div className={style.meetings} >
-            <Meeting/>
-            <Meeting/>
-            <Meeting/>
+            { TodaysMeetings.length > 0 ? TodaysMeetings.map((meeting)=>(
+              <Meeting meeting={meeting} />
+            )) : (
+              <div> No meeting for today </div>
+            ) }
           </div>
 
       </div>
@@ -57,9 +68,11 @@ function Meet() {
         <h3> Scheduled Meetings </h3>
 
           <div className={style.meetings} >
-            <Meeting/>
-            <Meeting/>
-            <Meeting/>
+            { TomorrowsMeeting.length > 0 ? TomorrowsMeeting.map((meeting)=>(
+              <Meeting meeting={meeting} />
+            )) : (
+              <div> No meeting available tomorrow </div>
+            ) }
           </div>
 
       </div>

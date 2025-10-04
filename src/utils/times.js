@@ -77,3 +77,8 @@ export function timeFomartLocalTime(time){
 
   return localTime
 }
+
+export function BackendToNowTime(time) {
+  const date = new Date(time);
+  return date.toLocaleDateString('en-US', { year: "numeric", month: "long", day: "numeric" , minute: "2-digit", hour: "2-digit", hour12: true});
+}

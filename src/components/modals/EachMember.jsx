@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Trash } from "lucide-react";
 import style from '../../styles/modals/invite.module.css'
 import Spinner from "../Spinner";

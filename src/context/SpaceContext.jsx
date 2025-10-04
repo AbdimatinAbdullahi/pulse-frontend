@@ -20,6 +20,44 @@ const reducer = (state, action) => {
             return {...state, spaces: [ ...state.spaces ]}
         case "SELECT_ACTIVE_SPACE":
             return {...state, activespace: action.payload}
+        
+        case "NEW_INVITATION":
+            return {
+                ...state,
+                activespace: {
+                ...state.activespace,
+                Invitations: [
+                    ...(state.activespace?.Invitations || []),
+                    action.payload
+                ]
+                }
+            }
+
+        case "NEW_MEETING":
+            return {
+                ...state,
+                activespace: {
+                ...state.activespace,
+                TodaysMeetings: [
+                    ...(state.activespace?.TodaysMeetings || []),
+                    action.payload
+                ]
+                }
+            }
+        case "CANCEL_INVITE":
+            return {
+                ...state,
+                activespace: {
+                ...state.activespace,
+                Invitations: state.activespace?.Invitations?.filter(invite => {
+                    const inviteUserId = invite?.id
+                    return inviteUserId !== action.payload.user
+                })
+                }
+            }
+
+
+
     }
 }
 
@@ -32,7 +70,22 @@ export const SpaceContextProvider = ({ children })=>{
     const user_id = user.id
     const [ state, dispatch ] = useReducer(reducer, initialState)
 
-    const { sendNewMeeting, sendNewInvitation, } = useWebsocket(user_id, state.activespace?.Space?.id)
+    const handleIncomingInvitation = (data)=>{
+        dispatch({ type: "NEW_INVITATION", payload: data })
+    }
+
+    const handleIncomingMeeting = (data)=>{
+        console.log("Incoming meeting", data)
+        dispatch({ type: "NEW_MEETING", payload: data })
+    }
+
+    const handleCancelInvite = (data)=>{
+        dispatch({ type: "CANCEL_INVITE", payload: data })
+    }
+
+
+
+    const { sendNewMeeting, sendNewInvitation, sendCancelInvitation } = useWebsocket(user_id, state.activespace?.Space?.id, handleIncomingMeeting, handleIncomingInvitation, handleCancelInvite)
     
 
     useEffect(()=>{
@@ -135,15 +188,18 @@ export const SpaceContextProvider = ({ children })=>{
         }
     }
 
-    const hanleCancelInvitation = async (id, email )=>{
+    const hanleCancelInvitation = async (id)=>{
         try {
             const cancelInvitationRes = await axios.post(`${room_url_services}/cancel-invitation`, {
-                invitationID: id,
-                cancelor: user_id,
-                space: state.activespace?.Space?.id
+                user_id: id,
+                cancelor_id: user_id,
+                space:state.activespace?.Space?.id
             })
 
             if(cancelInvitationRes.status == 200){
+                console.log("Cancel Invitation: ", cancelInvitationRes)
+                const { space, user } = cancelInvitationRes.data
+                sendCancelInvitation({space, user })
                 return { success : true }
             }
 
@@ -194,8 +250,16 @@ export const SpaceContextProvider = ({ children })=>{
     }
 
 
+    // UI updates callback
+
+    
+
+
     return (
-        <SpaceContext.Provider value={{ state, dispatch, HandleSpaceCreate, handleCreateNewMeeting, handleSendInvitation}} >
+        <SpaceContext.Provider value={{ state, dispatch, HandleSpaceCreate, handleCreateNewMeeting, handleSendInvitation
+                                        ,hanleCancelInvitation
+
+        }} >
             { children }
         </SpaceContext.Provider>
 )

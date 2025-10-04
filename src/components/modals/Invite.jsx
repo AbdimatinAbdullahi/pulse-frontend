@@ -3,20 +3,31 @@ import { Trash } from "lucide-react";
 import style from '../../styles/modals/invite.module.css'
 import { timeFomartLocalTime } from "../../utils/times";
 import Spinner from "../Spinner";
+import { useSpace } from "../../context/SpaceContext";
 
 
 function Invite({ invite }) {
 
   const [ Loading, setLoading ] = useState(false)
-  console.log("Invite: ", invite)
+  
   const formatTime = timeFomartLocalTime(invite.InvitedAt)
 
+  const { id, email } = invite
+  const { hanleCancelInvitation  } = useSpace()
+
+  console.log("Invite structure outloook: ", invite)
+
   const handleRemoveUser = async ()=>{
+    
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000);
+    
+    const result = await hanleCancelInvitation(id)
+    
+    console.log("Results of remove: ", result)  
+    
+    setLoading(false)  
   }
+
 
   return (
     <div className={style.memberContainer} key={invite?.id} >

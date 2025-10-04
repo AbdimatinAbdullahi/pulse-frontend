@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from '../styles/space.module.css'
 import { Video, Settings } from 'lucide-react'
 import { useWorkspaceModal } from '../context/WorkspaceModalContext'

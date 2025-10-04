@@ -5,7 +5,7 @@ const room_url = import.meta.env.VITE_WSS
 
 // This is cutom react hooks that manges websocket connection using user and spaceID, it listens for real time messages from the server and calls the appropriate
 // callback functions that will update state in the parensts components. It aslo provides actions to parents components to call server
-export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJoin){
+export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onCancelInvite){
     
     const socketRef = useRef(null)
 
@@ -56,6 +56,10 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJ
                 case "new_invitation":
                     onNewInvitation(data.payload)
                     break
+                
+                case "cancel_invite":
+                    onCancelInvite(data.payload)
+                    break
 
                 default:
                     console.warn("unknown message type: ", data.type)
@@ -73,7 +77,6 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJ
 
 
     const sendNewInvitation = (data)=>{
-        console.log("Data csending to new invitation: ", data)
         if(socketRef.current && socketRef.current.readyState === WebSocket.OPEN){
             socketRef.current.send( JSON.stringify({
                 type: "new_invitation",
@@ -92,7 +95,20 @@ export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onJ
         }
     }
 
+    const sendCancelInvitation = ({space, user })=>{
+        console.log("Data sending into useWebsocket: ", space, user)
+        if(socketRef.current && socketRef.current.readyState == WebSocket.OPEN){
+            socketRef.current.send(JSON.stringify({
+                type: "cancel_invite",
+                payload:{
+                    space: space,
+                    user: user
+                },
+            }))
+        } 
+    }
 
-    return { sendNewMeeting, sendNewInvitation }
+
+    return { sendNewMeeting, sendNewInvitation, sendCancelInvitation }
 
 }
