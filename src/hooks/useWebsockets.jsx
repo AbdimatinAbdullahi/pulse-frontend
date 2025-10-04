@@ -1,114 +1,180 @@
 import { useEffect, useRef } from "react";
 
-const room_url = import.meta.env.VITE_WSS
-
+const room_url = import.meta.env.VITE_WSS;
 
 // This is cutom react hooks that manges websocket connection using user and spaceID, it listens for real time messages from the server and calls the appropriate
 // callback functions that will update state in the parensts components. It aslo provides actions to parents components to call server
-export function useWebsocket(userID, spaceID, onNewMeeting, onNewInvitation, onCancelInvite){
-    
-    const socketRef = useRef(null)
+export function useWebsocket(
+  userID,
+  spaceID,
+  onNewMeeting,
+  onNewInvitation,
+  onCancelInvite,
+  onAccept,
+  onLeave
+) {
+  const socketRef = useRef(null);
+  const retryRef = useRef(0);
+  const maxRetry = 4;
 
-    useEffect(()=>{
-    
-        if(!userID || !spaceID){
-            return
-        }
+  useEffect(() => {
+    if (!userID || !spaceID) {
+      return;
+    }
 
-        const socket = new WebSocket(`${room_url}/room?userid=${userID}`)
+    let reconnectTimeout;
 
-        socketRef.current = socket
+    const connect = () => {
+      const socket = new WebSocket(`${room_url}/room?userid=${userID}`);
 
-        socket.onopen = ()=>{
-             const payload = {
-                type: "join",
-                payload: {
-                userID,
-                spaceID,
-                },
-            };
+      socketRef.current = socket;
 
-            console.log("Websocket connection is live")
-            socket.send(JSON.stringify(payload))
-        }
-
-        socket.onerror = (error)=>{
-            console.error("Connection is lost due to: ", error)
-        }
-
-
-        socket.onclose = (event) => {
-        console.log("Client saw close:", event.code, event.reason);
+      socket.onopen = () => {
+        retryRef.current = 0;
+        const payload = {
+          type: "join",
+          payload: {
+            userID,
+            spaceID,
+          },
         };
-        
 
+        console.log("Websocket connection is live");
+        socket.send(JSON.stringify(payload));
+      };
 
-        socket.onmessage = (event) =>{
-            // parsing data into form of javascript object
-            const data = JSON.parse(event.data)
-            switch (data.type){
-                
-                case "new_meeting":
-                    console.log("New meeting arrives: ", data.payload)
-                    onNewMeeting(data.payload)
-                    break
+      socket.onerror = (error) => {
+        console.error("Connection is lost due to: ", error);
+      };
 
-                case "new_invitation":
-                    onNewInvitation(data.payload)
-                    break
-                
-                case "cancel_invite":
-                    onCancelInvite(data.payload)
-                    break
-
-                default:
-                    console.warn("unknown message type: ", data.type)
-            }
+      socket.onclose = (event) => {
+        console.log("Client saw close:", event.code, event.reason);
+        if (retryRef.current < maxRetry) {
+          retryRef.current += 1;
+          const delay = 2000 * retryRef.current;
+          console.log(`🔁 Reconnecting in ${delay / 1000}s...`);
+          reconnectTimeout = setTimeout(connect, delay);
+        } else {
+          console.warn("Maxium retry reached!");
         }
-    
-        // this prevents memory leaks and "ghost connections" => whenc compoenents unmounts ot dependacies changes
-        return ()=>{
-            if(socketRef.current){
-                socketRef.current.close()
-            }
-        }
-    
-    }, [userID, spaceID ])
+      };
 
+      socket.onmessage = (event) => {
+        // parsing data into form of javascript object
+        const data = JSON.parse(event.data);
+        switch (data.type) {
+          case "new_meeting":
+            console.log("New meeting arrives: ", data.payload);
+            onNewMeeting(data.payload);
+            break;
 
-    const sendNewInvitation = (data)=>{
-        if(socketRef.current && socketRef.current.readyState === WebSocket.OPEN){
-            socketRef.current.send( JSON.stringify({
-                type: "new_invitation",
-                payload: data
-            }))
+          case "new_invitation":
+            onNewInvitation(data.payload);
+            break;
+
+          case "cancel_invite":
+            onCancelInvite(data.payload);
+            break;
+          case "accept_invitation":
+            console.log("Incoming accept invitation into websocket");
+            onAccept(data.payload);
+
+          case "leave_space":
+            console.log(
+              "Incoming accept invitation into websocket",
+              data.payload
+            );
+            console.log("Incomign data for leave space: ", data);
+            onLeave(data.payload);
+
+          default:
+            console.warn("unknown message type: ", data.type);
         }
+      };
+    };
+
+    // Initial Connect
+
+    connect();
+
+    // this prevents memory leaks and "ghost connections" => whenc compoenents unmounts ot dependacies changes
+    return () => {
+      console.log("Clearing up websocker");
+      clearTimeout(reconnectTimeout);
+      socketRef.current?.close();
+    };
+  }, [userID, spaceID]);
+
+  const sendNewInvitation = (data) => {
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send(
+        JSON.stringify({
+          type: "new_invitation",
+          payload: data,
+        })
+      );
     }
+  };
 
-    const sendNewMeeting = (data)=>{
-        console.log("Data coming into useWebsocket: ", data)
-        if(socketRef.current && socketRef.current.readyState == WebSocket.OPEN){
-            socketRef.current.send(JSON.stringify({
-                type: "new_meeting",
-                payload:data,
-            }))
-        }
+  const sendNewMeeting = (data) => {
+    console.log("Data coming into useWebsocket: ", data);
+    if (socketRef.current && socketRef.current.readyState == WebSocket.OPEN) {
+      socketRef.current.send(
+        JSON.stringify({
+          type: "new_meeting",
+          payload: data,
+        })
+      );
     }
+  };
 
-    const sendCancelInvitation = ({space, user })=>{
-        console.log("Data sending into useWebsocket: ", space, user)
-        if(socketRef.current && socketRef.current.readyState == WebSocket.OPEN){
-            socketRef.current.send(JSON.stringify({
-                type: "cancel_invite",
-                payload:{
-                    space: space,
-                    user: user
-                },
-            }))
-        } 
+  const sendCancelInvitation = ({ space, user }) => {
+    console.log("Data sending into useWebsocket: ", space, user);
+    if (socketRef.current && socketRef.current.readyState == WebSocket.OPEN) {
+      socketRef.current.send(
+        JSON.stringify({
+          type: "cancel_invite",
+          payload: {
+            space: space,
+            user: user,
+          },
+        })
+      );
     }
+  };
 
+  // adds the user for admins that is active
+  const sendAcceptInvitation = (data) => {
+    console.log("Sending data into invitation: ", data);
+    if (socketRef.current && socketRef.current.readyState == WebSocket.OPEN) {
+      socketRef.current.send(
+        JSON.stringify({
+          type: "accept_invitation",
+          payload: data,
+        })
+      );
+    }
+  };
 
-    return { sendNewMeeting, sendNewInvitation, sendCancelInvitation }
+  const sendLeaveSpace = (data) => {
+    console.log("Leaving space data", data);
+    if (socketRef.current && socketRef.current.readyState == WebSocket.OPEN) {
+      socketRef.current.send(
+        JSON.stringify({
+          type: "leave_space",
+          payload: data,
+        })
+      );
+    } else {
+      console.warn("Data not sent for leave space");
+    }
+  };
 
+  return {
+    sendNewMeeting,
+    sendNewInvitation,
+    sendCancelInvitation,
+    sendAcceptInvitation,
+    sendLeaveSpace,
+  };
 }

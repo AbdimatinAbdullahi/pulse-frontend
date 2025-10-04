@@ -3,12 +3,15 @@ import style from '../styles/sidebar.module.css'
 import { Settings, UserPen } from 'lucide-react'
 import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 import { useSpace } from '../context/SpaceContext'
+import { useAuth } from '../context/AuthContext'
 
 function SideBar() {
 
   const { openModal } = useWorkspaceModal()
   const { state, dispatch } = useSpace()
   const { spaces, activespace } = state
+
+  const { user } = useAuth()
 
   const handleClickSpace = (space)=>{
     if(activespace.id = space.id) return
@@ -49,7 +52,7 @@ function SideBar() {
       <div className={style.profileDiv}>
         
         <div className={style.name} >
-          <h4>Abdimatin Abdullahi</h4>
+          <h4>{ user?.fullname } </h4>
           <span> Available </span>
         </div>
 

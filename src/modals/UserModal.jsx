@@ -2,12 +2,48 @@ import React, { useState } from 'react'
 import style from '../styles/modals/user.module.css'
 import { CircleOff, LogOut, Moon, SquarePen, Trash, X } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { useSpace } from '../context/SpaceContext'
+import { BackendToNowTime } from '../utils/times'
+import Spinner from '../components/Spinner'
+
 function UserModal({ onClose }) {
 
-  const [spaces, setspaces] = useState(["Space One", "Space two", "Space three"])
-  // const [spaces, setspaces] = useState([])
+ 
+  const [ Code, setCode ] = useState("")
+  const [ Loading, setLoading ] = useState(false)
 
   const { logout } = useAuth()
+  const { handleAcceptInvitation, handleLeaveWorkspace, state } = useSpace()
+
+
+  const { spaces } = state;
+
+  const handleInvitation = async ()=>{
+
+    if(Code.trim().length == 0) return
+
+    setLoading(true)
+    const result = await handleAcceptInvitation(Code)
+    setLoading(false)
+    if(result.success){
+      alert("Invitation accepted")
+    } else {
+      alert("Invitation failed")
+    }
+
+  }
+
+  const handleLeaveSpace = async (space_id)=>{
+    setLoading(true)
+    const result = await handleLeaveWorkspace(space_id)
+    setLoading(false)
+    if(result.success){
+      alert("Left workspace!")
+    } else {
+      alert("faule to leave space")
+    }
+    
+  }
 
   return (
     <div className={style.userOverLay} >
@@ -38,14 +74,14 @@ function UserModal({ onClose }) {
                 <h2> My spaces </h2>
 
                 { spaces.length> 0 ? spaces.map((space)=>(
-                  <div className={style.spacecont} > 
+                  <div className={style.spacecont} key={space.Space?.id} > 
                     
                     <div className={style.partOne} > 
-                        <h3> {space} </h3>
-                        <span> Joined on Sep 30 2025 </span>
+                        <h3> {space.Space.name} </h3>
+                        <span> {BackendToNowTime(space.Space.created_at)} </span>
                     </div>
 
-                    <div className={style.partTow}  data-tooltip='Leave workspace' >
+                    <div className={style.partTow}  data-tooltip='Leave workspace' onClick={()=> handleLeaveSpace(space.Space?.id)} >
                       <Trash size={30} />
                     </div>          
 
@@ -75,11 +111,12 @@ function UserModal({ onClose }) {
 
                   <div className={style.inputContainer} >
                       <span> Paste the code sent to your email </span>
-                      <input type="text" placeholder='Paste the code here' />
+                      <input type="text" placeholder='Paste the code here' value={Code} onChange={(e)=>setCode(e.target.value)} />
                   </div>
 
-                  <div className={style.acceptButton} >
-                      Join
+                  
+                  <div className={style.acceptButton} onClick={handleInvitation} >
+                      { Loading ? <Spinner/> : "Join" }
                   </div>
 
 

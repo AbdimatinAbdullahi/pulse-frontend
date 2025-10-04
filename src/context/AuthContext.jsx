@@ -12,7 +12,7 @@ export function AuthProvider({children}){
     const navigate = useNavigate()
     const [user, setUser] = useState({
         id: "",
-        name: "",
+        fullname: "",
         email :"",
         token: ""
     });

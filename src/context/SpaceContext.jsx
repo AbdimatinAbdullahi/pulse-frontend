@@ -3,6 +3,7 @@ import { useAuth } from "./AuthContext";
 import React, {useState, useEffect, useReducer, useContext, createContext, use} from "react";
 
 import { useWebsocket } from '../hooks/useWebsockets'
+import { data } from "react-router-dom";
 
 const SpaceContext = createContext()
 
@@ -55,7 +56,36 @@ const reducer = (state, action) => {
                 })
                 }
             }
+        
+        case "ACCEPT_INVITATION":
+            console.log("Incoming accept payload: ", action.payload)
+            return {
+                ...state,
+                activespace: {
+                    ...state.activespace,
+                    Members : [
+                        ...(state.activespace?.TodaysMeetings || []),
+                        action.payload
+                    ],
+                    Invitations: state.activespace?.Invitations?.filter(invite => {
+                        return invite?.id !== action.payload.user_id
+                    })
 
+                }
+            }
+
+        case "LEAVE_SPACE":
+            console.log("Incoming leave space ", action.payload)
+            return {
+                ...state,
+                activespace: {
+                    ...state.activespace,
+                    Members: (state.activespace?.Members || []).filter(
+                        member => member.id !== action.payload.user_id
+                        )
+
+                }
+            }
 
 
     }
@@ -67,7 +97,8 @@ const room_url_services = import.meta.env.VITE_ROOM_SERVICE_URL
 export const SpaceContextProvider = ({ children })=>{
 
     const { user } = useAuth()
-    const user_id = user.id
+    const user_id = user.id;
+    const user_name = user.fullname;
     const [ state, dispatch ] = useReducer(reducer, initialState)
 
     const handleIncomingInvitation = (data)=>{
@@ -83,9 +114,19 @@ export const SpaceContextProvider = ({ children })=>{
         dispatch({ type: "CANCEL_INVITE", payload: data })
     }
 
+    const handleAccept = (data) =>{
+        console.log("INcoming accept", data)
+        dispatch({ type: "ACCEPT_INVITATION", payload: data })
+    }
 
 
-    const { sendNewMeeting, sendNewInvitation, sendCancelInvitation } = useWebsocket(user_id, state.activespace?.Space?.id, handleIncomingMeeting, handleIncomingInvitation, handleCancelInvite)
+    const handleLeave = (data) =>{
+        console.log("Incoming data for leave space: ", data)
+        dispatch({ type: "LEAVE_SPACE", payload: data })
+    }
+
+
+    const { sendNewMeeting, sendNewInvitation, sendCancelInvitation, sendAcceptInvitation, sendLeaveSpace} = useWebsocket(user_id, state.activespace?.Space?.id, handleIncomingMeeting, handleIncomingInvitation, handleCancelInvite, handleAccept, handleLeave)
     
 
     useEffect(()=>{
@@ -183,7 +224,6 @@ export const SpaceContextProvider = ({ children })=>{
             }
 
         } catch (error) {
-            console.log("Error creating invitation: ", error)
             return { success: false }
         }
     }
@@ -197,14 +237,12 @@ export const SpaceContextProvider = ({ children })=>{
             })
 
             if(cancelInvitationRes.status == 200){
-                console.log("Cancel Invitation: ", cancelInvitationRes)
                 const { space, user } = cancelInvitationRes.data
                 sendCancelInvitation({space, user })
                 return { success : true }
             }
 
         } catch (error) {
-            console.log("Unable to cancel invite: ", error)
             return { success: false }
         }
     }
@@ -221,43 +259,54 @@ export const SpaceContextProvider = ({ children })=>{
         }
     }
 
-    const handleLeaveWorkspace = async ()=>{
+    const handleLeaveWorkspace = async (space_id)=>{
+        console.log("Incoming space id: ", space_id)
         try {
-            const leaveRes = await axios.delete(`${room_url_services}/leave-space?uuid=${user_id}&space=${state.activespace?.Space?.id}`)
+            const leaveRes = await axios.post(`${room_url_services}/leave-space`,{
+                "space_id" : space_id,
+                "user_id" : user_id
+            })
             if(leaveRes.status == 200){
+                console.log("Leave resonse : ", leaveRes.data)
+                sendLeaveSpace(leaveRes.data)
                 return { success: true }
             }
         } catch (error) {
-            console.error("Failed to leave workspace: ", error)
             return { success: false }
         }
     }
 
-    const handleAcceptInvitation = async (code, email)=>{
+    const handleAcceptInvitation = async (code)=>{
+        console.log("Email ", user.email)
+        console.log("Code ", code)
+        console.log("Name: ", user_name)
+        console.log("ID: ", user_id)
         try {
             const acceptInvitationRes = await axios.post(`${room_url_services}/accept-invitation`,{
                 code: code,
-                email: email,
+                email: user.email,
+                user: user_id,
+                name : user_name
             })
 
             if(acceptInvitationRes.status == 200){
+                console.log("Invitation data: ", acceptInvitationRes.data)
+                sendAcceptInvitation(acceptInvitationRes.data)
                 return { success : true }
             }
 
         } catch (error) {
+            console.error("Error while sending invitation: ", error)
             return { success: false}
         }
     }
-
-
-    // UI updates callback
 
     
 
 
     return (
         <SpaceContext.Provider value={{ state, dispatch, HandleSpaceCreate, handleCreateNewMeeting, handleSendInvitation
-                                        ,hanleCancelInvitation
+                                        ,hanleCancelInvitation, handleAcceptInvitation, handleLeaveWorkspace
 
         }} >
             { children }

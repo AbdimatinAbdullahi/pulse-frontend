@@ -15,6 +15,8 @@ function Invite({ invite }) {
   const { id, email } = invite
   const { hanleCancelInvitation  } = useSpace()
 
+  console.log("Invite ", invite)
+
   console.log("Invite structure outloook: ", invite)
 
   const handleRemoveUser = async ()=>{
