@@ -7,6 +7,7 @@ import style from '../styles/pulse.module.css'
 import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 import UserModal from '../modals/UserModal'
 import CreateSpace from '../modals/CreateSpace'
+import DeleteSpace from '../modals/DeleteSpace'
 
 function Pulse() {
 
@@ -19,6 +20,7 @@ function Pulse() {
 
     { action === "user" && <UserModal onClose={closeModal} /> }
     { action === "create" && <CreateSpace onClose={closeModal} /> }
+    { action === "deleteModal" && <DeleteSpace onClose={closeModal} /> }
 
     </div>
   )

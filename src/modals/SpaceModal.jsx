@@ -7,6 +7,7 @@ import Invite from "../components/modals/Invite";
 import EachMember from "../components/modals/EachMember";
 import Inviter from "../components/modals/Inviter";
 import { useSpace } from "../context/SpaceContext";
+import DeleteSpace from "../components/modals/DeleteSpaceModal";
 
 
 function SpaceModal({ onClose }) {
@@ -70,6 +71,9 @@ function SpaceModal({ onClose }) {
 
         {/* Invite Container */}
         <Inviter/>
+
+        {/*Delete container  */}
+        <DeleteSpace/>
 
       </div>
     </div>
