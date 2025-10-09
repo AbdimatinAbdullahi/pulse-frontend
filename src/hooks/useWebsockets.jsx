@@ -12,7 +12,8 @@ export function useWebsocket(
   onCancelInvite,
   onLeave,
   onDelete,
-  onAcceptInvitation
+  onAcceptInvitation,
+  onRemoveMember
 ) {
   const socketRef = useRef(null);
   const retryRef = useRef(0);
@@ -97,6 +98,11 @@ export function useWebsocket(
           case "accept_invitation":
             console.log("Incoming payload into connection: ", data)
             onAcceptInvitation(data)
+            break
+          
+            case "remove_member":
+            console.log("Incomign remove member details: ", data.payload)
+            onRemoveMember(data.payload)
             break
 
           default:
@@ -192,6 +198,16 @@ export function useWebsocket(
         }
       }))
     }
+  };
+
+  const sendRemoveUser = (data) =>{
+    console.log("Remove user outgoing: ", data)
+    if(socketRef.current && socketRef.current.readyState == WebSocket.OPEN){
+      socketRef.current.send(JSON.stringify({
+        type:"remove_member",
+        payload: data
+      }))
+    }
   }
 
   return {
@@ -200,6 +216,7 @@ export function useWebsocket(
     sendCancelInvitation,
     sendLeaveSpace,
     sendDelete,
-    sendAcceptInvitation
+    sendAcceptInvitation,
+    sendRemoveUser
   };
 }

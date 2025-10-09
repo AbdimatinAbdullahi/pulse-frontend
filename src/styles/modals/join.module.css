@@ -1,0 +1,29 @@
+:root{
+    --font-secular : "Secular One";
+    --font-lato: "Lato";
+    --font-ubuntu: "Ubuntu", sans-serif;
+    --primary-color: white;
+    --secondary-color: #cc00ff;
+    --hover-color: #9900cc;
+    --success-color: #16A34A;
+    --error-color: #DC2626;
+}
+.joinOverLay{
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.642);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    top: 0;
+    left: 0;
+}
+
+.joinModalContainer{
+    width: 98%;
+    height: 95%;
+    background-color: white;
+    border-radius: 10px;
+}

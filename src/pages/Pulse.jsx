@@ -8,6 +8,7 @@ import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 import UserModal from '../modals/UserModal'
 import CreateSpace from '../modals/CreateSpace'
 import DeleteSpace from '../modals/DeleteSpace'
+import JoinMeeting from '../modals/JoinMeeting'
 
 function Pulse() {
 
@@ -21,6 +22,7 @@ function Pulse() {
     { action === "user" && <UserModal onClose={closeModal} /> }
     { action === "create" && <CreateSpace onClose={closeModal} /> }
     { action === "deleteModal" && <DeleteSpace onClose={closeModal} /> }
+    { action === "meetingJoin" && <JoinMeeting onClose={closeModal} /> }
 
     </div>
   )

@@ -1,12 +1,10 @@
 import axios from "axios";
 import { useAuth } from "./AuthContext";
 import React, {
-  useState,
   useEffect,
   useReducer,
   useContext,
   createContext,
-  use,
 } from "react";
 
 import { useWebsocket } from "../hooks/useWebsockets";
@@ -149,6 +147,20 @@ const reducer = (state, action) => {
           },
         }
       }
+    
+    case "REMOVE_USER_FROM_SPACE":
+
+      const removedID = action.payload.user_id
+
+      const updatedMembersAfterRemove = state.activespace.Members.filter(member => member.id !== removedID)
+
+      return {
+        ...state,
+        activespace: {
+          ...state.activespace,
+          Members: updatedMembersAfterRemove
+        }
+      }
 
       
   }
@@ -189,13 +201,18 @@ export const SpaceContextProvider = ({ children }) => {
     dispatch({ type: "ACCEPT_INVITATION", payload: data })
   }
 
+  const handleRemoveUser = (data) =>{
+    dispatch({ type:"REMOVE_USER_FROM_SPACE", payload: data })
+  }
+
   const {
     sendNewMeeting,
     sendNewInvitation,
     sendCancelInvitation,
     sendLeaveSpace,
     sendDelete,
-    sendAcceptInvitation
+    sendAcceptInvitation,
+    sendRemoveUser
   } = useWebsocket(
     user_id,
     state.activespace?.Space?.id,
@@ -204,7 +221,8 @@ export const SpaceContextProvider = ({ children }) => {
     handleCancelInvite,
     handleLeave,
     handleDelete,
-    handleAccept
+    handleAccept,
+    handleRemoveUser
   );
 
   useEffect(() => {
@@ -404,6 +422,30 @@ export const SpaceContextProvider = ({ children }) => {
     }
   };
 
+  const handleRemoveMemberFromSpace = async (user_id, space_id, remover_id)=>{
+    console.log("UserID: ", user_id)
+    console.log("spaceid: ", space_id)
+    console.log("removerid: ", remover_id)
+    try {
+      const removeRes = await axios.post(`${room_url_services}/remove-member`,{
+        "space_id" : space_id,
+        "user_id" : user_id,
+        "remover_id" : remover_id
+      })
+
+      if(removeRes.status == 200){
+        console.log("Remove response data: ", removeRes.data)
+        sendRemoveUser(removeRes.data)
+      }
+
+      return { success: true}
+
+    } catch (error) {
+      console.error("Error removing the member from the space: ", error)
+      return { success: false}
+    }
+  } 
+
   return (
     <SpaceContext.Provider
       value={{
@@ -416,6 +458,7 @@ export const SpaceContextProvider = ({ children }) => {
         handleAcceptInvitation,
         handleLeaveWorkspace,
         handleDeleteWorkspace,
+        handleRemoveMemberFromSpace
       }}
     >
       {children}
