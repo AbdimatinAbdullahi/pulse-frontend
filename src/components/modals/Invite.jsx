@@ -12,22 +12,23 @@ function Invite({ invite }) {
   
   const formatTime = timeFomartLocalTime(invite.InvitedAt)
 
-  const { id, email } = invite
+  // get the invite id
+  const { id } = invite
+
   const { hanleCancelInvitation  } = useSpace()
 
   console.log("Invite ", invite)
-
-  console.log("Invite structure outloook: ", invite)
 
   const handleRemoveUser = async ()=>{
     
     setLoading(true)
     
     const result = await hanleCancelInvitation(id)
-    
+
+    setLoading(false)  
+        
     console.log("Results of remove: ", result)  
     
-    setLoading(false)  
   }
 
 

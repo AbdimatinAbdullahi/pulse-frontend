@@ -10,8 +10,9 @@ export function useWebsocket(
   onNewMeeting,
   onNewInvitation,
   onCancelInvite,
-  onAccept,
-  onLeave
+  onLeave,
+  onDelete,
+  onAcceptInvitation
 ) {
   const socketRef = useRef(null);
   const retryRef = useRef(0);
@@ -25,6 +26,7 @@ export function useWebsocket(
     let reconnectTimeout;
 
     const connect = () => {
+      
       const socket = new WebSocket(`${room_url}/room?userid=${userID}`);
 
       socketRef.current = socket;
@@ -38,33 +40,41 @@ export function useWebsocket(
             spaceID,
           },
         };
-
-        console.log("Websocket connection is live");
         socket.send(JSON.stringify(payload));
       };
 
       socket.onerror = (error) => {
+       
         console.error("Connection is lost due to: ", error);
+      
       };
 
       socket.onclose = (event) => {
-        console.log("Client saw close:", event.code, event.reason);
+
         if (retryRef.current < maxRetry) {
+
           retryRef.current += 1;
+
           const delay = 2000 * retryRef.current;
+
           console.log(`🔁 Reconnecting in ${delay / 1000}s...`);
+
           reconnectTimeout = setTimeout(connect, delay);
+
         } else {
+
           console.warn("Maxium retry reached!");
+
         }
+
       };
 
       socket.onmessage = (event) => {
         // parsing data into form of javascript object
         const data = JSON.parse(event.data);
         switch (data.type) {
+          
           case "new_meeting":
-            console.log("New meeting arrives: ", data.payload);
             onNewMeeting(data.payload);
             break;
 
@@ -75,20 +85,22 @@ export function useWebsocket(
           case "cancel_invite":
             onCancelInvite(data.payload);
             break;
-          case "accept_invitation":
-            console.log("Incoming accept invitation into websocket");
-            onAccept(data.payload);
-
+          
           case "leave_space":
-            console.log(
-              "Incoming accept invitation into websocket",
-              data.payload
-            );
-            console.log("Incomign data for leave space: ", data);
             onLeave(data.payload);
+            break
+
+          case "delete_space":
+            onDelete(data.payload)
+            break
+            
+          case "accept_invitation":
+            console.log("Incoming payload into connection: ", data)
+            onAcceptInvitation(data)
+            break
 
           default:
-            console.warn("unknown message type: ", data.type);
+            console.warn("unknown message type: ", data);
         }
       };
     };
@@ -143,19 +155,6 @@ export function useWebsocket(
     }
   };
 
-  // adds the user for admins that is active
-  const sendAcceptInvitation = (data) => {
-    console.log("Sending data into invitation: ", data);
-    if (socketRef.current && socketRef.current.readyState == WebSocket.OPEN) {
-      socketRef.current.send(
-        JSON.stringify({
-          type: "accept_invitation",
-          payload: data,
-        })
-      );
-    }
-  };
-
   const sendLeaveSpace = (data) => {
     console.log("Leaving space data", data);
     if (socketRef.current && socketRef.current.readyState == WebSocket.OPEN) {
@@ -170,11 +169,37 @@ export function useWebsocket(
     }
   };
 
+
+  const sendDelete = (space_id)=>{
+    if(socketRef.current && socketRef.current.readyState == WebSocket.OPEN){
+      socketRef.current.send(JSON.stringify({
+        type: "delete_space",
+        payload: {
+          space_id
+        }
+      }))
+    }
+  }
+
+  const sendAcceptInvitation = (data) =>{
+    console.log("Sending data into connection: ", data)
+    if(socketRef.current && socketRef.current.readyState == WebSocket.OPEN){
+      socketRef.current.send(JSON.stringify({
+        type: "accept_invitation",
+        payload:{
+          invitationID: data.invitationID,
+          user: data.user
+        }
+      }))
+    }
+  }
+
   return {
     sendNewMeeting,
     sendNewInvitation,
     sendCancelInvitation,
-    sendAcceptInvitation,
     sendLeaveSpace,
+    sendDelete,
+    sendAcceptInvitation
   };
 }

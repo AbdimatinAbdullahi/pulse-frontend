@@ -5,6 +5,9 @@ import { useWorkspaceModal } from '../context/WorkspaceModalContext'
 import { useState } from 'react'
 import Spinner from '../components/Spinner'
 import Toastify from './Toastify'
+import  { useAuth } from '../context/AuthContext'
+import { useSpace } from '../context/SpaceContext'
+
 
 function DeleteSpace() {
     
@@ -13,14 +16,49 @@ function DeleteSpace() {
     const [ Error, setError ] = useState("")
     const [ success, setSuccess] = useState("")
 
-    const handleDeleteSpace = async ()=>{
-        setLoading(true)
-        setSuccess("Error deleting space")
+    const { user } = useAuth()
+    const {  state, handleDeleteWorkspace} = useSpace()
 
-        setTimeout(() => {
-            setSuccess("")
+    const { id } = user
+    const { activespace } = state
+
+
+
+    const handleDeleteSpace = async ()=>{
+
+        console.log("User id deleting space: ", id)
+        console.log("Space being deleted: ", activespace.Space?.id)
+        const space_id = activespace.Space?.id
+
+        setLoading(true)
+    
+        const result = await handleDeleteWorkspace(space_id, id)
+        
+        setLoading(false)
+
+        if(result.success){
+            
+            setSuccess("Space deleted successfully")
+
+            setTimeout(() => {
+                
+                setSuccess("")
+                            
+                closeModal()
+            
+            }, 2000);
+        
+        } else {
+            
+            setError("Failed to deleted space!")
             setLoading(false)
-        }, 5000);
+            
+            setTimeout(()=>{
+                        
+                setError("")
+            
+            }, 3000)
+        }
         
     }
 
