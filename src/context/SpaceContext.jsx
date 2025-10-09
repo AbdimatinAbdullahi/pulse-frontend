@@ -170,10 +170,15 @@ const reducer = (state, action) => {
 const room_url_services = import.meta.env.VITE_ROOM_SERVICE_URL;
 
 export const SpaceContextProvider = ({ children }) => {
+  
   const { user } = useAuth();
+  
   const user_id = user.id;
+  
   const user_name = user.fullname;
-  const [state, dispatch] = useReducer(reducer, initialState);
+  
+  const [state, dispatch] = useReducer(reducer, initialState);  
+
 
   const handleIncomingInvitation = (data) => {
     dispatch({ type: "NEW_INVITATION", payload: data });

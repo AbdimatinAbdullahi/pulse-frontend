@@ -4,6 +4,7 @@ import { Activity } from 'lucide-react'
 import { BackendToNowTime } from '../utils/times'
 
 import { useWorkspaceModal }  from '../context/WorkspaceModalContext'
+import JoinMeeting from '../modals/JoinMeeting'
 
 function Meeting({ meeting }) {
 
@@ -14,7 +15,7 @@ function Meeting({ meeting }) {
 
   const time = BackendToNowTime(meeting?.start)
 
-  const { openModal } = useWorkspaceModal()  
+  const { handleOpenJoinMeeting, JoinMeetingModalOpen } = useWorkspaceModal()  
 
   return (
     <div className={style.meeting} >
@@ -36,12 +37,14 @@ function Meeting({ meeting }) {
                 
         <div className={style.join} > 
 
-          <div className={style.join2} onClick={ ()=> openModal("meetingJoin") } > Join </div>
+          <div className={style.join2} onClick={handleOpenJoinMeeting} > Join </div>
 
           { meeting?.private === false && ( <div className={style.share} > Copy the link </div>) }
 
         </div>
-    
+  
+    { JoinMeetingModalOpen && <JoinMeeting meeting={meeting}/> }
+
     </div>
   )
 }

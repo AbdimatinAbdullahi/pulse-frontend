@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import SideBar from '../components/SideBar'
 import Space from '../components/Space'
@@ -13,7 +13,7 @@ import JoinMeeting from '../modals/JoinMeeting'
 function Pulse() {
 
   const { action, closeModal } = useWorkspaceModal()
-  
+    
   return (
     <div className={style.pulseContainer} >
       <SideBar/>
@@ -22,7 +22,6 @@ function Pulse() {
     { action === "user" && <UserModal onClose={closeModal} /> }
     { action === "create" && <CreateSpace onClose={closeModal} /> }
     { action === "deleteModal" && <DeleteSpace onClose={closeModal} /> }
-    { action === "meetingJoin" && <JoinMeeting onClose={closeModal} /> }
 
     </div>
   )

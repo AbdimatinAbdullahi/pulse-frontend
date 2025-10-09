@@ -11,7 +11,7 @@
 .joinOverLay{
     position: absolute;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.642);
     display: flex;
     align-items: center;
@@ -19,6 +19,7 @@
     z-index: 2;
     top: 0;
     left: 0;
+    border-radius: inherit;
 }
 
 .joinModalContainer{
@@ -26,4 +27,45 @@
     height: 95%;
     background-color: white;
     border-radius: 10px;
+    position: relative;
 }
+
+.meetingActions{
+    position: absolute;
+    left: calc(50% - 450px);
+    bottom: 10px;
+    width: 900px;
+    height: 80px;
+    background-color: black;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.raiseHand, .shareScreen, .audioToggle, .videoToggle, .cancelOrLeaveMeeting {
+    height: 70%;
+    width: 100px;
+    background-color: rgba(214, 203, 203, 0.37);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    &:hover{
+        background-color: #dc262694;
+        color: white;
+        cursor: pointer;
+    }
+}
+
+.cancelOrLeaveMeeting{
+    background-color: #DC2626;
+    color: white;
+    width: 200px;
+    justify-content: space-evenly;
+    font-family: var(--font-ubuntu);
+    font-weight: 700;
+}
+
